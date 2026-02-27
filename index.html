@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latem - Hub de Sistemas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #64748b;
+            --bg-body: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --display-bg: #0f172a;
+            --display-text: #38bdf8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: 80px;
+            background-color: var(--display-bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            transition: width 0.3s;
+            z-index: 10;
+        }
+        
+        .sidebar:hover { width: 200px; }
+
+        .logo-area {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
+            overflow: hidden;
+            background: white;
+            padding: 5px;
+        }
+        
+        .logo-area img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .nav-item {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            cursor: pointer;
+            color: #94a3b8;
+            transition: 0.2s;
+            text-decoration: none;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border-left: 4px solid var(--primary);
+        }
+
+        .nav-icon {
+            width: 80px;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-text {
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .sidebar:hover .nav-text { opacity: 1; }
+
+        /* --- Main Content --- */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-card);
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-left h1 {
+            font-size: 1.2rem;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+        
+        .header-left p {
+            font-size: 0.85rem;
+            color: var(--secondary);
+        }
+
+        .header-center {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-main);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .clock-display {
+            background: #f1f5f9;
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .user-info { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; }
+        .user-avatar { width: 35px; height: 35px; background: var(--secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; }
+
+        /* --- Dashboard Grid --- */
+        .dashboard-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .dashboard-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--text-main);
+        }
+
+        .dashboard-title h2 { font-size: 2rem; font-weight: 700; margin-bottom: 10px; }
+        .dashboard-title p { color: var(--secondary); font-size: 1rem; }
+
+        .systems-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        /* --- System Cards --- */
+        .system-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 30px 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .system-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+            transform-origin: left;
+        }
+
+        .system-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.1);
+            border-color: #cbd5e1;
+        }
+
+        .system-card:hover::before { transform: scaleX(1); }
+
+        .icon-wrapper {
+            width: 70px;
+            height: 70px;
+            background: #eff6ff;
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+
+        .system-card:hover .icon-wrapper {
+            background: var(--primary);
+            color: white;
+        }
+
+        .system-card h3 {
+            font-size: 1.2rem;
+            color: var(--text-main);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .system-card p {
+            font-size: 0.9rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .btn-access {
+            background: var(--bg-body);
+            color: var(--primary);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .system-card:hover .btn-access {
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .systems-grid { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div class="logo-area">
+            <img src="photos/logo-latem.png" alt="Logo" onerror="this.style.display='none'">
+        </div>
+        
+        <a href="#" class="nav-item active">
+            <div class="nav-icon"><i class="fa-solid fa-table-cells-large"></i></div>
+            <span class="nav-text">Painel Principal</span>
+        </a>
+
+        <div style="margin-top: auto; width: 100%; margin-bottom: 20px;">
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><i class="fa-solid fa-right-from-bracket"></i></div>
+                <span class="nav-text">Sair</span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        
+        <header>
+            <div class="header-left">
+                <h1>Hub de Sistemas</h1>
+                <p>Selecione o módulo de pesagem desejado</p>
+            </div>
+
+            <div class="header-center">
+                <i class="fa-regular fa-clock" style="color: var(--primary);"></i>
+                <div class="clock-display" id="clock">00:00:00</div>
+                <div style="font-size: 0.9rem; color: var(--secondary);" id="date">01/01/2024</div>
+            </div>
+
+            <div class="user-info">
+                <span id="userNameDisplay">Operador</span>
+                <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
+            </div>
+        </header>
+
+        <div class="dashboard-wrapper">
+            <div class="dashboard-title">
+                <h2>Bem-vindo ao Sistemas da Latem</h2>
+                <p>Qual deseja acessar?</p>
+            </div>
+
+            <div class="systems-grid">
+                
+                <a href="./sistema_pesagem_tl/index.html" class="system-card">
+                    <div class="icon-wrapper"><i class="fa-solid fa-truck-ramp-box"></i></div>
+                    <h3>Sistema de Pesagem de Tarugos e Lingotes</h3>
+                    <p>Módulo de Pesagem</p>
+                    <span class="btn-access">Acessar Sistema <i class="fa-solid fa-arrow-right"></i></span>
+                </a>
+
+                <a href="./sistema_pesagem_mp/index.html" class="system-card">
+                    <div class="icon-wrapper"><i class="fa-solid fa-layer-group"></i></div>
+                    <h3>Sistema de Pesagem de Materia Prima</h3>
+                    <p>Módulo de Pesagem</p>
+                    <span class="btn-access">Acessar Sistema <i class="fa-solid fa-arrow-right"></i></span>
+                </a>
+
+                <a href="./sistema_identificacao_tl/index.html" class="system-card">
+                    <div class="icon-wrapper"><i class="fa-solid fa-keyboard"></i></div>
+                    <h3>Sistema de Identificacao de Tarugos e Lingotes</h3>
+                    <p>Módulo de Identificacao</p>
+                    <span class="btn-access">Acessar Sistema <i class="fa-solid fa-arrow-right"></i></span>
+                </a>
+
+                <a href="./sistema_identificacao_mp/index.html" class="system-card">
+                    <div class="icon-wrapper"><i class="fa-solid fa-dolly"></i></div>
+                    <h3>Sistema de Identificacao de Materia Prima</h3>
+                    <p>Módulo de Identificacao</p>
+                    <span class="btn-access">Acessar Sistema <i class="fa-solid fa-arrow-right"></i></span>
+                </a>
+
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- RELÓGIO E DATA ---
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString('pt-BR');
+            document.getElementById('date').innerText = now.toLocaleDateString('pt-BR');
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // --- PUXA O USUÁRIO DO LOCALSTORAGE (Mesma lógica do seu sistema) ---
+        window.onload = () => {
+            const user = localStorage.getItem('latem_user');
+            if(user) {
+                document.getElementById('userNameDisplay').innerText = user;
+            }
+        };
+    </script>
+</body>
+</html>
