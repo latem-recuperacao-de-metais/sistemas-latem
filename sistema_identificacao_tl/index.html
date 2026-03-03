@@ -1,9 +1,10 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Identificação - Tarugos e Lingotes</title>
+    <link rel="icon" type="image/png" href="../photos/logo-latem.png">
     <!-- Fontes Principais -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <!-- Fonte para Código de Barras -->
@@ -160,16 +161,16 @@
         }
 
         input:focus, select:focus { border-color: var(--primary); background: white; }
-        input:read-only { background-color: #e2e8f0; cursor: not-allowed; }
+        input:read-only, select:disabled, input:disabled { background-color: #e2e8f0; cursor: not-allowed; }
 
         /* --- Scale Section --- */
         .display-container {
             background: var(--display-bg); color: var(--display-text); padding: 20px 30px;
             border-radius: 16px; text-align: right; position: relative; box-shadow: inset 0 0 30px rgba(0,0,0,0.6);
-            display: flex; flex-direction: column; justify-content: center; height: 120px; flex-shrink: 0;
+            display: flex; flex-direction: column; justify-content: center; height: 150px; flex-shrink: 0;
         }
 
-        .weight-value { font-family: 'Courier New', monospace; font-size: 3.5rem; font-weight: 700; text-shadow: 0 0 15px rgba(56, 189, 248, 0.4); }
+        .weight-value { font-family: 'Courier New', monospace; font-size: 4.5rem; font-weight: 700; text-shadow: 0 0 15px rgba(56, 189, 248, 0.4); }
 
         .weight-controls { display: grid; grid-template-columns: 0.8fr 1fr 1fr 1fr; gap: 15px; flex-shrink: 0; }
         .weight-input-card { background: #f8fafc; padding: 10px 15px; border-radius: 12px; border: 1px solid #e2e8f0; }
@@ -177,27 +178,24 @@
         .highlight { background: #ecfdf5; border-color: #a7f3d0; }
         .highlight input { color: var(--success); border-color: var(--success); }
 
+        .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; flex-shrink: 0; }
         .btn { padding: 12px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; font-size: 0.95rem; }
         .btn-primary { background: var(--primary); color: white; }
         .btn-warning { background: var(--warning); color: white; }
-        .btn-danger { background: var(--danger); color: white; }
         .btn-secondary { background: white; border: 1px solid #cbd5e1; color: var(--text-main); }
+        .btn-danger { background: var(--danger); color: white; }
 
         .history-section { flex: 1; display: flex; flex-direction: column; overflow: hidden; margin-top: 10px; background: white; border-radius: 12px; padding: 15px; border: 1px solid #e2e8f0; }
         .table-container { overflow-y: auto; flex: 1; }
         table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-        th { text-align: left; padding: 12px; background: #f8fafc; color: var(--secondary); position: sticky; top: 0; font-weight: 700; }
+        th { text-align: left; padding: 12px; background: #f8fafc; color: var(--secondary); position: sticky; top: 0; font-weight: 700; z-index: 5; }
         td { padding: 10px 12px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; }
 
         /* Modals */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.9); display: flex; justify-content: center; align-items: center; z-index: 1000; }
-        .login-box { background: white; padding: 40px; border-radius: 20px; width: 400px; text-align: center; }
-        
-        .user-modal-box { background: white; padding: 30px; border-radius: 16px; width: 700px; max-height: 80vh; display: flex; flex-direction: column; gap: 20px; }
-
         .etiqueta-modal { background: white; width: 380px; display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2000; flex-direction: column; box-shadow: 0 0 50px rgba(0,0,0,0.5); font-family: 'Courier New', monospace; }
-        .relatorio-modal { background: white; width: 900px; max-height: 90vh; display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2000; flex-direction: column; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
-        .relatorio-content { padding: 40px; overflow-y: auto; font-family: Arial, sans-serif; color: black; }
+        .relatorio-modal { background: white; width: 800px; max-height: 90vh; display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2000; flex-direction: column; box-shadow: 0 0 50px rgba(0,0,0,0.5); border-radius: 8px; overflow: hidden; }
+        .relatorio-content { padding: 40px; overflow-y: auto; flex: 1; font-family: Arial, sans-serif; color: black; }
 
         .hidden { display: none !important; }
 
@@ -205,9 +203,9 @@
         #camposTarugo { display: flex; flex-direction: column; gap: 12px; border-top: 1px dashed #e2e8f0; padding-top: 12px; margin-top: 5px; }
 
         .relatorio-header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #000; padding-bottom: 15px; }
-        .relatorio-info { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; font-size: 14px; border: 1px solid #ccc; padding: 15px; background: #f9f9f9; }
+        .relatorio-info { display: grid; gap: 20px; margin-bottom: 20px; font-size: 14px; border: 1px solid #ccc; padding: 15px; background: #f9f9f9; }
         .relatorio-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 11px; }
-        .relatorio-table th { background: #eee; font-weight: bold; border-bottom: 2px solid #000; padding: 8px; text-align: left; }
+        .relatorio-table th { background: #eee; font-weight: bold; border-bottom: 2px solid #000; padding: 8px; }
         .relatorio-table td { padding: 8px; border-bottom: 1px solid #f0f0f0; }
 
         @media print {
@@ -222,38 +220,20 @@
 </head>
 <body>
 
+    <!-- Bloqueio Global -->
+    <div id="duplicateTabModal" class="modal-overlay hidden" style="z-index: 99999; background: #0f172a;">
+        <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); max-width: 450px; text-align: center;">
+            <i class="fa-solid fa-triangle-exclamation" style="font-size: 3.5rem; color: #ef4444; margin-bottom: 20px;"></i>
+            <h2 style="margin-bottom: 10px; color: #1e293b;">Sistema já está em uso!</h2>
+            <p style="color: #64748b; margin-bottom: 25px; line-height: 1.5;">
+                Identifiquei um sistema da Latem já em uso em outra aba ou janela neste computador. 
+                <br><br>
+                Para evitar erros e travamentos, por favor, volte para a aba que já está aberta.
+            </p>
+        </div>
+    </div>
+
     <div id="toast-container"></div>
-
-    <!-- LOGIN -->
-    <div id="loginModal" class="modal-overlay">
-        <div class="login-box">
-            <div style="margin-bottom: 20px;"><img src="photos/logo-mp.png" alt="Logo" style="max-height: 100px;"></div>
-            <h2 style="margin-bottom: 10px;">Sistema de Identificação de Tarugos e Lingotes</h2>
-            <p style="color: var(--secondary); margin-bottom: 25px;">Acesso ao Sistema</p>
-            <form id="loginForm" style="display: flex; flex-direction: column; gap: 10px;">
-                <select id="username" required><option value="">Selecione um usuário...</option></select>
-                <input type="password" id="password" placeholder="Senha" required>
-                <button type="submit" class="btn btn-primary">Entrar</button>
-            </form>
-            <p id="loginError" style="color: var(--danger); font-size: 0.8rem; margin-top: 10px;" class="hidden">Senha incorreta.</p>
-        </div>
-    </div>
-
-    <!-- GERENCIAMENTO DE USUÁRIOS -->
-    <div id="userModal" class="modal-overlay hidden">
-        <div class="user-modal-box">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h3><i class="fa-solid fa-users-gear"></i> Gerenciar Usuários</h3>
-                <button class="btn-secondary" style="padding:5px 10px;" onclick="closeUserModal()"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; background: #f8fafc; border-radius: 8px;">
-                <div class="input-group"><label>Usuário</label><input type="text" id="newUsername" placeholder="Nome"></div>
-                <div class="input-group"><label>Senha</label><input type="password" id="newPassword" placeholder="Senha"></div>
-                <div class="input-group" style="grid-column: span 2;"><button class="btn btn-primary" onclick="createNewUser()">Criar Usuário</button></div>
-            </div>
-            <div class="table-container" style="max-height: 300px;"><table id="usersTable"><thead><tr><th>Usuário</th><th>Cargo</th><th>Ações</th></tr></thead><tbody></tbody></table></div>
-        </div>
-    </div>
 
     <!-- ETIQUETA MODAL -->
     <div id="etiquetaModal" class="etiqueta-modal">
@@ -267,21 +247,17 @@
     <!-- RELATÓRIO MODAL -->
     <div id="relatorioModal" class="relatorio-modal">
         <div id="relatorioConteudo" class="relatorio-content"></div>
-        <div class="relatorio-footer" style="padding: 15px; border-top: 1px solid #eee; display: flex; gap: 10px; background: white;">
-            <button class="btn btn-primary" onclick="imprimirRelatorio()" style="flex:1">Imprimir Relatório</button>
+        <div class="relatorio-footer" style="padding: 15px; border-top: 1px solid #eee; display: flex; gap: 10px; background: white; text-align: center;">
+            <button class="btn btn-primary" onclick="imprimirRelatorioReal()" style="flex:1">Gerar Relatório</button>
             <button class="btn btn-secondary" onclick="fecharRelatorio()" style="flex:1">Fechar</button>
         </div>
     </div>
 
     <nav class="sidebar">
-        <div class="logo-area"><img src="photos/logo-latem.png" alt="Logo"></div>
+        <div class="logo-area"><img src="../photos/logo-latem.png" alt="Logo"></div>
         <a href="#" class="nav-item active">
-            <div class="nav-icon"><i class="fa-solid fa-tags"></i></div>
+            <div class="nav-icon"><i class="fa-solid fa-tag"></i></div>
             <span class="nav-text">Identificação</span>
-        </a>
-        <a href="#" class="nav-item" onclick="openUserModal()">
-            <div class="nav-icon"><i class="fa-solid fa-users"></i></div>
-            <span class="nav-text">Usuários</span>
         </a>
         <div style="margin-top: auto; width: 100%; margin-bottom: 20px;">
             <a href="#" class="nav-item" onclick="logout()">
@@ -294,8 +270,8 @@
     <main class="main-content">
         <header>
             <div class="status-badge"><div class="status-dot"></div><span>Conectado</span></div>
-            <div class="header-center"><i class="fa-regular fa-clock"></i><div class="clock-display" id="clock">00:00:00</div></div>
-            <div class="user-info"><span id="userNameDisplay">---</span><div class="user-avatar"><i class="fa-solid fa-user"></i></div></div>
+            <div class="header-center"><i class="fa-regular fa-clock" style="color:var(--primary)"></i><div class="clock-display" id="clock">00:00:00</div></div>
+            <div class="user-info"><span id="userNameDisplay">Operador</span><div class="user-avatar"><i class="fa-solid fa-user"></i></div></div>
         </header>
 
         <div class="card form-section">
@@ -321,49 +297,56 @@
 
             <div id="camposTarugo" class="hidden">
                 <div class="input-group"><label>Forno Homogenização</label><input type="text" id="forno" placeholder="Ex: 12T, 30T"></div>
-                <div class="input-group"><label>Polegada</label><input type="text" id="polegada" placeholder="Ex: 4&quot;, 5&quot;"></div>
+                <div class="input-group"><label>Polegada</label><input type="text" id="polegada" placeholder="Ex: 4, 5"></div>
                 <div class="input-group"><label>Comprimento (m)</label><input type="number" step="0.01" id="comprimento" placeholder="0.00"></div>
             </div>
             
             <button class="btn btn-secondary" onclick="limparTudo()" style="margin-top: auto;"><i class="fa-solid fa-eraser"></i> Limpar Tudo</button>
         </div>
 
-        <div class="scale-section" style="display: flex; flex-direction: column; gap: 15px;">
+        <div class="scale-section">
             <div class="display-container">
-                <div style="position:absolute; top:15px; left:20px; font-size:0.8rem; color:#64748b;">PESO LÍQUIDO</div>
+                <div style="position:absolute; top:15px; left:20px; font-size:0.8rem; color:#64748b; font-weight:600">PESO LÍQUIDO (kg)</div>
                 <div class="weight-value" id="displayLiquido">0</div>
-                <div style="position:absolute; bottom:20px; right:30px; font-size:1.5rem; color:#64748b;">KG</div>
+                <div style="position:absolute; bottom:25px; right:30px; font-size:1.5rem; color:#64748b;">KG</div>
             </div>
 
             <div class="weight-controls">
-                <div class="weight-input-card" style="background: #fff7ed;"><label>Qtd (Peças)</label><input type="number" id="quantidade" value="0"></div>
-                <div class="weight-input-card"><label>Bruto (kg)</label><input type="number" id="pesoBruto" oninput="calcularPesos()"></div>
-                <div class="weight-input-card"><label>Tara (kg)</label><input type="number" id="pesoTara" oninput="calcularPesos()"></div>
-                <div class="weight-input-card highlight"><label>Líquido (kg)</label><input type="number" id="pesoLiquido" readonly></div>
+                <div class="weight-input-card" style="background: #fff7ed;">
+                    <label>Qtd (Peças)</label>
+                    <input type="number" id="quantidade" value="0">
+                </div>
+                <div class="weight-input-card">
+                    <label>Peso Bruto (kg)</label>
+                    <input type="number" id="pesoBruto" oninput="calcularPesos()">
+                </div>
+                <div class="weight-input-card">
+                    <label>Tara (kg)</label>
+                    <input type="number" id="pesoTara" placeholder="0" oninput="calcularPesos()">
+                </div>
+                <div class="weight-input-card highlight">
+                    <label>Peso Líquido (kg)</label>
+                    <input type="number" id="pesoLiquido" value="0" readonly>
+                </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <button class="btn btn-primary" onclick="registrarProducao()"><i class="fa-solid fa-check-double"></i> Identificar</button>
+            <div class="actions">
+                <button class="btn btn-primary" onclick="registrarProducao()"><i class="fa-solid fa-tag"></i> Identificar</button>
                 <button class="btn btn-warning" onclick="gerarRelatorio()"><i class="fa-solid fa-print"></i> Relatório</button>
             </div>
 
             <div class="history-section">
-                <div class="card-title"><span><i class="fa-solid fa-list-check"></i> Registros Recentes</span></div>
+                <div class="card-title"><span><i class="fa-solid fa-list-check"></i> Registros</span></div>
                 <div class="table-container">
                     <table id="historyTable">
                         <thead>
                             <tr>
-                                <th>Liga</th>
-                                <th>Lote+Forn</th>
-                                <th>Tipo</th>
-                                <th>Forno</th>
-                                <th>Pol</th>
-                                <th>Comp</th>
-                                <th>Qtd</th>
-                                <th>Bruto</th>
-                                <th>Tara</th>
-                                <th>Liq</th>
-                                <th>Ações</th>
+                                <th style="text-align: center; width: 10%;">Nº</th>
+                                <th style="text-align: center; width: 15%;">Quantidade</th>
+                                <th style="text-align: right; width: 20%;">Peso Líquido</th>
+                                <th style="text-align: right; width: 20%;">Tara</th>
+                                <th style="text-align: right; width: 20%;">Peso Bruto</th>
+                                <th style="text-align: center; width: 15%;">Ações</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -374,80 +357,38 @@
     </main>
 
     <script>
+        // --- BLOQUEIO GLOBAL ---
+        const globalTabChannel = new BroadcastChannel('latem_global_lock');
+        globalTabChannel.onmessage = (event) => {
+            if (event.data === 'TEM_ALGUEM_AI') globalTabChannel.postMessage('EU_JA_ESTOU_AQUI');
+            else if (event.data === 'EU_JA_ESTOU_AQUI') document.getElementById('duplicateTabModal').classList.remove('hidden');
+        };
+        setTimeout(() => { globalTabChannel.postMessage('TEM_ALGUEM_AI'); }, 100);
+
         // --- RELÓGIO ---
         function updateClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString('pt-BR'); }
         setInterval(updateClock, 1000);
 
-        // --- USUÁRIOS ---
-        const DEFAULT_USERS = [{ user: 'admin', pass: 'admin', role: 'admin' }, { user: 'operador', pass: '1234', role: 'user' }];
-        function getUsers() { return JSON.parse(localStorage.getItem('latem_prod_users')) || DEFAULT_USERS; }
-        function saveUsers(users) { localStorage.setItem('latem_prod_users', JSON.stringify(users)); }
-
-        function renderUserSelect() {
-            const select = document.getElementById('username');
-            select.innerHTML = '<option value="">Selecione um usuário...</option>';
-            getUsers().forEach(u => select.innerHTML += `<option value="${u.user}">${u.user}</option>`);
+        // --- NAVEGAÇÃO ---
+        function obterUsuarioMatriz() {
+            return localStorage.getItem('usuarioLogado') || 
+                   localStorage.getItem('usuarioAtivo') || 
+                   localStorage.getItem('latem_user') || 
+                   localStorage.getItem('user') || 
+                   'Operador';
         }
 
-        function openUserModal() {
-            const currentUser = localStorage.getItem('prod_user');
-            if (getUsers().find(u => u.user === currentUser)?.role === 'admin') {
-                document.getElementById('userModal').classList.remove('hidden'); renderUsersTable();
-            } else { showToast("Acesso negado. Apenas administradores.", 'error'); }
-        }
-        function closeUserModal() { document.getElementById('userModal').classList.add('hidden'); }
-
-        function renderUsersTable() {
-            const tbody = document.querySelector('#usersTable tbody'); tbody.innerHTML = '';
-            getUsers().forEach(u => {
-                const tr = document.createElement('tr');
-                let btns = `<button class="btn" style="color:var(--warning)" onclick="changePassword('${u.user}')"><i class="fa-solid fa-key"></i></button>`;
-                if (u.user !== localStorage.getItem('prod_user')) btns += `<button class="btn" style="color:var(--danger)" onclick="deleteUser('${u.user}')"><i class="fa-solid fa-trash"></i></button>`;
-                tr.innerHTML = `<td>${u.user}</td><td>${u.role==='admin'?'Admin':'Operador'}</td><td>${btns}</td>`;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function createNewUser() {
-            const u = document.getElementById('newUsername').value, p = document.getElementById('newPassword').value;
-            if(!u || !p) return showToast("Preencha tudo.", 'warning');
-            const users = getUsers(); if(users.find(x => x.user === u)) return showToast("Já existe.", 'error');
-            users.push({user: u, pass: p, role: 'user'}); saveUsers(users); renderUsersTable(); renderUserSelect();
-            showToast("Usuário criado!");
-        }
-
-        function deleteUser(u) { if(confirm(`Excluir ${u}?`)) { saveUsers(getUsers().filter(x => x.user !== u)); renderUsersTable(); renderUserSelect(); } }
-        function changePassword(u) { const p = prompt(`Nova senha para ${u}:`); if(p) { const us = getUsers(); us.find(x => x.user === u).pass = p; saveUsers(us); showToast("Senha alterada."); } }
-
-        // --- LOGIN ---
-        function initLogin() {
-            renderUserSelect();
-            if(localStorage.getItem('prod_user')) {
-                document.getElementById('loginModal').classList.add('hidden');
-                document.getElementById('userNameDisplay').innerText = localStorage.getItem('prod_user');
-            }
-        }
-        document.getElementById('loginForm').onsubmit = (e) => {
-            e.preventDefault();
-            const u = document.getElementById('username').value, p = document.getElementById('password').value;
-            const found = getUsers().find(x => x.user === u && x.pass === p);
-            if(found) {
-                localStorage.setItem('prod_user', found.user);
-                document.getElementById('loginModal').classList.add('hidden');
-                document.getElementById('userNameDisplay').innerText = found.user;
-                showToast("Login realizado!", "success");
-            } else { document.getElementById('loginError').classList.remove('hidden'); }
-        };
         function logout() { 
-            showToast("Sessão encerrada com sucesso.", "info");
-            setTimeout(() => { localStorage.removeItem('prod_user'); location.reload(); }, 1000);
+            showToast("Voltando ao menu principal...", "info");
+            setTimeout(() => { window.location.href = '../index.html'; }, 1000);
         }
 
         // --- LÓGICA ---
         function toggleCamposTarugo() { document.getElementById('camposTarugo').classList.toggle('hidden', document.getElementById('tipo').value !== 'Tarugo'); }
         function calcularPesos() {
-            const b = parseFloat(document.getElementById('pesoBruto').value) || 0, t = parseFloat(document.getElementById('pesoTara').value) || 0, l = b - t;
-            document.getElementById('pesoLiquido').value = l; document.getElementById('displayLiquido').innerText = l;
+            const b = parseFloat(document.getElementById('pesoBruto').value) || 0, t = parseFloat(document.getElementById('pesoTara').value) || 0, l = Math.max(0, b - t);
+            document.getElementById('pesoLiquido').value = l > 0 ? l.toFixed(1) : ''; 
+            document.getElementById('displayLiquido').innerText = l > 0 ? l.toFixed(1) : '0';
         }
 
         function showToast(msg, type='success') {
@@ -461,70 +402,152 @@
         function getDb() { return JSON.parse(localStorage.getItem('latem_prod_db')) || []; }
         function saveDb(db) { localStorage.setItem('latem_prod_db', JSON.stringify(db)); renderHistory(); }
 
+        function lockSessionFields() {
+            document.getElementById('liga').disabled = true;
+            document.getElementById('loteFornada').disabled = true;
+            document.getElementById('tipo').disabled = true;
+            document.getElementById('forno').disabled = true;
+            document.getElementById('polegada').disabled = true;
+            document.getElementById('comprimento').disabled = true;
+        }
+
+        function unlockSessionFields() {
+            ['liga', 'loteFornada', 'tipo', 'forno', 'polegada', 'comprimento'].forEach(id => { document.getElementById(id).disabled = false; });
+        }
+
         function registrarProducao() {
             const lote = document.getElementById('loteFornada').value, liga = document.getElementById('liga').value, tipo = document.getElementById('tipo').value, qtd = document.getElementById('quantidade').value, b = document.getElementById('pesoBruto').value, t = document.getElementById('pesoTara').value || 0, l = document.getElementById('pesoLiquido').value;
             if(!lote || !liga || !b || qtd <= 0) return showToast("Preencha campos obrigatórios", "warning");
+            
+            const currentUser = obterUsuarioMatriz();
             const item = {
                 id: Date.now(), data: new Date().toLocaleDateString('pt-BR'), hora: new Date().toLocaleTimeString('pt-BR'), lote, liga, tipo, qtd, bruto: b, tara: t, liq: l,
                 forno: tipo === 'Tarugo' ? document.getElementById('forno').value : '', polegada: tipo === 'Tarugo' ? document.getElementById('polegada').value : '', comprimento: tipo === 'Tarugo' ? document.getElementById('comprimento').value : '',
-                responsavel: localStorage.getItem('prod_user')
+                responsavel: currentUser
             };
             const db = getDb(); db.unshift(item); saveDb(db);
+            lockSessionFields();
             showToast("Identificado com sucesso!");
             gerarEtiqueta(item);
             
-            // Limpa pesos
+            // Após pesar, permite apagar apenas pesoBruto, pesoTara, pesoLiquido e Quantidade
             document.getElementById('pesoBruto').value = '';
             document.getElementById('pesoTara').value = '';
-            document.getElementById('pesoLiquido').value = '';
+            document.getElementById('pesoLiquido').value = '0';
             document.getElementById('displayLiquido').innerText = '0';
+            
+            if (tipo === 'Lingote') {
+                document.getElementById('quantidade').value = '0';
+            } else {
+                document.getElementById('quantidade').value = '';
+            }
         }
 
         function renderHistory() {
-            const tbody = document.querySelector('#historyTable tbody'); tbody.innerHTML = '';
-            getDb().slice(0, 15).forEach(i => {
+            const tbody = document.querySelector('#historyTable tbody'); 
+            tbody.innerHTML = '';
+            const db = getDb();
+            
+            db.slice(0, 15).forEach((i, index) => {
+                const contador = db.length - index;
                 tbody.innerHTML += `<tr>
-                    <td>${i.liga}</td><td>${i.lote}</td><td>${i.tipo}</td><td>${i.forno||'-'}</td><td>${i.polegada||'-'}</td><td>${i.comprimento||'-'}</td>
-                    <td style="font-weight:bold">${i.qtd}</td><td>${i.bruto}</td><td>${i.tara}</td><td style="font-weight:bold">${i.liq}</td>
-                    <td><button class="btn" style="color:var(--danger)" onclick="removerItem(${i.id})"><i class="fa-solid fa-trash"></i></button></td>
+                    <td style="text-align: center;">${contador}</td>
+                    <td style="text-align: center; font-weight:bold;">${i.qtd} pçs</td>
+                    <td style="text-align: right; font-weight:bold; color:var(--primary)">${i.liq} kg</td>
+                    <td style="text-align: right;">${i.tara} kg</td>
+                    <td style="text-align: right;">${i.bruto} kg</td>
+                    <td style="text-align: center;">
+                        <button class="btn-danger" style="padding: 5px 8px; height: auto;" onclick="removerItem(${i.id})">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
                 </tr>`;
             });
         }
-        function removerItem(id) { if(confirm("Excluir?")) saveDb(getDb().filter(i => i.id !== id)); }
-        function limparTudo() { ['loteFornada', 'liga', 'forno', 'polegada', 'comprimento', 'quantidade', 'pesoBruto', 'pesoTara', 'pesoLiquido'].forEach(id => { const el = document.getElementById(id); if(el) el.value = id==='quantidade'?'0':''; }); document.getElementById('displayLiquido').innerText = '0'; }
+
+        function removerItem(id) { 
+            if(confirm("Excluir?")) {
+                let db = getDb();
+                db = db.filter(i => i.id !== id);
+                saveDb(db);
+                if (db.length === 0) unlockSessionFields();
+            }
+        }
+
+        function limparTudo() { 
+            const isSessionActive = getDb().length > 0;
+            const tara = document.getElementById('pesoTara').value;
+            const bruto = document.getElementById('pesoBruto').value;
+            const qtd = document.getElementById('quantidade').value;
+
+            if (isSessionActive) {
+                if(!tara && !bruto && (!qtd || qtd === '0')) return showToast("Os campos editáveis já estão vazios.", 'warning');
+                document.getElementById('pesoBruto').value = '';
+                document.getElementById('pesoTara').value = '';
+                document.getElementById('pesoLiquido').value = '0';
+                document.getElementById('displayLiquido').innerText = '0';
+                
+                if (document.getElementById('tipo').value === 'Lingote') {
+                    document.getElementById('quantidade').value = '0';
+                } else {
+                    document.getElementById('quantidade').value = '';
+                }
+                showToast("Campos parciais limpos com sucesso.", "success");
+            } else {
+                const liga = document.getElementById('liga').value;
+                const loteFornada = document.getElementById('loteFornada').value;
+                const forno = document.getElementById('forno').value;
+                const polegada = document.getElementById('polegada').value;
+                const comprimento = document.getElementById('comprimento').value;
+
+                if (!liga && !loteFornada && !forno && !polegada && !comprimento && !tara && !bruto) {
+                    return showToast("Os campos já estão vazios.", 'warning');
+                }
+
+                unlockSessionFields();
+                ['loteFornada', 'liga', 'forno', 'polegada', 'comprimento', 'pesoTara', 'pesoBruto'].forEach(id => {
+                    const el = document.getElementById(id); if(el) el.value = '';
+                });
+                
+                document.getElementById('pesoLiquido').value = '0';
+                document.getElementById('displayLiquido').innerText = '0';
+                document.getElementById('tipo').value = 'Lingote';
+                document.getElementById('quantidade').value = '0';
+                toggleCamposTarugo();
+                
+                showToast("Todos os campos limpos com sucesso.", "success");
+            }
+        }
 
         // --- ETIQUETA ---
         function gerarEtiqueta(item) {
             document.getElementById('etiquetaArea').innerHTML = `
-                <div style="text-align: center; border-bottom: 2px solid black; padding-bottom: 5px; margin-bottom: 10px;">
-                    <img src="photos/logo-latem.png" style="max-height: 40px; margin-bottom: 5px;">
-                    <div style="font-weight: bold; font-size: 13px;">IDENTIFICAÇÃO DE PRODUTO</div>
+                <div style="text-align: center; border-bottom: 2px solid black; padding-bottom: 10px; margin-bottom: 10px;">
+                    <img src="../photos/logo-latem.png" style="max-height: 45px; margin-bottom: 5px;">
+                    <div style="font-weight: bold; font-size: 14px;">COMPROVANTE DE IDENTIFICAÇÃO</div>
                 </div>
-                <div style="font-size: 11px; line-height: 1.4; display: flex; justify-content: space-between; align-items: flex-start;">
-                    <!-- Lado Esquerdo -->
+                <div style="font-size: 11px; line-height: 1.4; display: flex; justify-content: space-between; align-items: flex-start; min-height: 50px;">
                     <div style="text-align: left;">
                         <div><strong>LIGA:</strong> ${item.liga}</div>
                         <div><strong>LOTE/FORNADA:</strong> ${item.lote}</div>
                         <div><strong>TIPO:</strong> ${item.tipo.toUpperCase()}</div>
                     </div>
-                    <!-- Lado Direito (Apenas Tarugo) -->
                     ${item.tipo === 'Tarugo' ? `
                         <div style="text-align: right;">
                             <div><strong>FORNO:</strong> ${item.forno}</div>
-                            <div><strong>POL:</strong> ${item.polegada}</div>
+                            <div><strong>POL:</strong> ${item.polegada}"</div>
                             <div><strong>COMP:</strong> ${item.comprimento}m</div>
                         </div>
                     ` : ''}
                 </div>
-                <!-- Parte Comum -->
-                <div style="font-size: 11px; line-height: 1.4; margin-top: 5px; border-top: 1px dashed #000; padding-top: 5px;">
-                    <div style="display:flex; justify-content:space-between"><span>BRUTO: ${item.bruto}KG</span><span>TARA: ${item.tara}KG</span></div>
-                    <div style="font-size: 18px; font-weight: bold; text-align: center; margin: 5px 0;">LÍQUIDO: ${item.liq} KG</div>
-                    <div style="font-size: 16px; font-weight: bold; text-align: center;">QTD: ${item.qtd} PEÇAS</div>
+                <div style="font-size: 11px; line-height: 1.4; margin-top: 10px; border-top: 1px dashed #000; padding-top: 10px;">
+                    <div style="display:flex; justify-content:space-between"><span>PESO BRUTO: ${item.bruto} KG</span><span>TARA: ${item.tara} KG</span></div>
+                    <div style="font-size: 20px; font-weight: bold; text-align: center; margin: 8px 0;">PESO LÍQUIDO: ${item.liq} KG</div>
+                    <div style="font-size: 18px; font-weight: bold; text-align: center;">QTD: ${item.qtd} PEÇAS</div>
                 </div>
-                <div style="margin-top: 10px; text-align: center;">
-                    <div style="font-family: 'Libre Barcode 128', cursive; font-size: 45px;">*${item.lote}*</div>
-                    <div style="font-size: 9px;">${item.data} ${item.hora} - ${item.responsavel.toUpperCase()}</div>
+                <div style="margin-top: 15px; text-align: center;">
+                    <div style="font-family: 'Libre Barcode 128', cursive; font-size: 50px;">*${item.lote}*</div>
+                    <div style="font-size: 10px; margin-top: 5px;">${item.data} ${item.hora} - ${item.responsavel.toUpperCase()}</div>
                 </div>`;
             document.getElementById('etiquetaModal').style.display = 'flex';
         }
@@ -533,57 +556,117 @@
         // --- RELATÓRIO ---
         function gerarRelatorio() {
             const db = getDb(); if(!db.length) return showToast("Sem dados.", "warning");
+            
             let rows = '', tb = 0, tt = 0, tl = 0;
-            db.forEach(i => {
+            const isTarugo = db[0].tipo === 'Tarugo';
+            const dbImpressao = db.slice().reverse();
+
+            dbImpressao.forEach((i, index) => {
                 tb += parseFloat(i.bruto); tt += parseFloat(i.tara); tl += parseFloat(i.liq);
-                rows += `<tr><td>${i.liga}</td><td>${i.lote}</td><td>${i.tipo}</td><td>${i.forno||'-'}</td><td>${i.polegada||'-'}</td><td>${i.comprimento||'-'}</td><td>${i.liq}</td><td>${i.tara}</td><td>${i.bruto}</td></tr>`;
+                const contador = index + 1;
+
+                rows += `<tr>
+                    <td style="text-align: center;">${contador}</td>
+                    <td style="text-align: center;">${i.qtd}</td>
+                    <td style="text-align: right; font-weight: bold;">${i.liq}</td>
+                    <td style="text-align: right;">${i.tara}</td>
+                    <td style="text-align: right;">${i.bruto}</td>
+                </tr>`;
             });
+
+            const fileNameDate = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
+            const loteSafe = db[0].lote.replace(/[\/\\]/g, '-');
+            const fileName = `RILT_${fileNameDate}_${db[0].liga}_${loteSafe}_${tb.toFixed(2)}kg`;
+            document.body.setAttribute('data-filename', fileName);
+
             document.getElementById('relatorioConteudo').innerHTML = `
-                <div class="relatorio-header"><img src="photos/logo-latem.png" style="max-height: 60px; margin-bottom: 10px;"><h2>Relatório de Identificação de Tarugos e Lingotes</h2></div>
-                <div class="relatorio-info">
+                <div class="relatorio-header">
+                    <img src="../photos/logo-latem.png" style="max-height: 60px; margin-bottom: 10px;">
+                    <h2>Relatório de Identificação de Tarugos e Lingotes</h2>
+                </div>
+
+                <div class="relatorio-info" style="grid-template-columns: 1fr 1fr;">
                     <div style="display:flex; flex-direction:column; gap:5px;">
-                        <div><strong>Data:</strong> ${new Date().toLocaleDateString('pt-BR')}</div>
-                        <div><strong>Hora:</strong> ${new Date().toLocaleTimeString('pt-BR')}</div>
-                        <div><strong>Responsável:</strong> ${localStorage.getItem('prod_user').toUpperCase()}</div>
+                        <div><strong>Liga:</strong> ${db[0].liga}</div>
+                        <div><strong>Lote + Fornada:</strong> ${db[0].lote}</div>
+                        <div><strong>Tipo:</strong> ${db[0].tipo.toUpperCase()}</div>
                     </div>
-                    <div style="display:flex; flex-direction:column; gap:5px;">
-                        <div><strong>Peso Bruto Total:</strong> ${tb.toFixed(2)} kg</div>
-                        <div><strong>Tara Total:</strong> ${tt.toFixed(2)} kg</div>
-                        <div><strong>Peso Líquido Total:</strong> ${tl.toFixed(2)} kg</div>
+                    
+                    ${isTarugo ? `
+                    <div style="display:flex; flex-direction:column; gap:5px; text-align: right;">
+                        <div><strong>Forno:</strong> ${db[0].forno}</div>
+                        <div><strong>Polegada:</strong> ${db[0].polegada}"</div>
+                        <div><strong>Comprimento:</strong> ${db[0].comprimento}m</div>
+                    </div>
+                    ` : '<div></div>'}
+
+                    <div style="grid-column: span 2; margin-top:10px; border-top:1px dashed #000; padding-top:10px; display:flex; justify-content:space-around; font-weight:bold;">
+                        <span>Peso Bruto Total: ${tb.toFixed(2)} kg</span>
+                        <span>Tara Total: ${tt.toFixed(2)} kg</span>
+                        <span>Peso Líquido Total: ${tl.toFixed(2)} kg</span>
                     </div>
                 </div>
+
                 <table class="relatorio-table">
-                    <thead><tr><th>Liga</th><th>Lote+Forn</th><th>Tipo</th><th>Forno</th><th>Pol</th><th>Comp</th><th>Líquido</th><th>Tara</th><th>Bruto</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 10%;">Nº</th>
+                            <th style="text-align: center; width: 15%;">Quantidade</th>
+                            <th style="text-align: right; width: 25%;">Peso Líquido (kg)</th>
+                            <th style="text-align: right; width: 25%;">Tara (kg)</th>
+                            <th style="text-align: right; width: 25%;">Peso Bruto (kg)</th>
+                        </tr>
+                    </thead>
                     <tbody>${rows}</tbody>
-                </table>`;
+                </table>
+                
+                <div style="margin-top: 30px; text-align: center; font-size: 11px; color: #333; border-top: 1px dashed #ccc; padding-top: 10px;">
+                    ${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR')} - ${db[0].responsavel.toUpperCase()}
+                </div>`;
             document.getElementById('relatorioModal').style.display = 'flex';
         }
+
         function fecharRelatorio() { document.getElementById('relatorioModal').style.display = 'none'; }
         
-        function imprimirRelatorio() {
-            const now = new Date();
-            const dataRel = now.toLocaleDateString('pt-BR').replace(/\//g, '-');
-            const horaRel = now.toLocaleTimeString('pt-BR').replace(/:/g, '-');
+        function imprimirRelatorioReal() {
             const originalTitle = document.title;
-            
-            // Define o título do documento para o nome do arquivo PDF (RITL_data_hora)
-            document.title = `RITL_${dataRel}_${horaRel}`;
+            document.title = document.body.getAttribute('data-filename') || 'RILT_Relatorio';
 
-            document.body.classList.add('printing-report'); 
-            window.print(); 
-            document.body.classList.remove('printing-report');
+            document.body.classList.add('printing-report'); window.print(); document.body.classList.remove('printing-report');
             
-            // Restaura o título original
             document.title = originalTitle;
-            
             localStorage.removeItem('latem_prod_db'); 
+            
+            unlockSessionFields();
             renderHistory(); 
             limparTudo(); 
             fecharRelatorio();
+            
             showToast("Relatório impresso e dados apagados.");
         }
 
-        window.onload = () => { initLogin(); renderHistory(); };
+        window.onload = () => { 
+            updateClock();
+            document.getElementById('userNameDisplay').innerText = obterUsuarioMatriz();
+            
+            // Restaura dados da sessão, se houver
+            if (getDb().length > 0) {
+                lockSessionFields();
+                const last = getDb()[0];
+                document.getElementById('liga').value = last.liga;
+                document.getElementById('loteFornada').value = last.lote;
+                document.getElementById('tipo').value = last.tipo;
+                
+                if (last.tipo === 'Tarugo') {
+                    document.getElementById('forno').value = last.forno || '';
+                    document.getElementById('polegada').value = last.polegada || '';
+                    document.getElementById('comprimento').value = last.comprimento || '';
+                }
+                toggleCamposTarugo();
+            }
+            renderHistory(); 
+        };
+        
         window.onbeforeprint = () => { if(document.getElementById('etiquetaModal').style.display === 'flex') document.body.classList.add('printing-label'); };
         window.onafterprint = () => { document.body.classList.remove('printing-label'); };
     </script>
