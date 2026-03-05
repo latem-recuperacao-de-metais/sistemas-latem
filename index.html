@@ -3,390 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Central de Sistemas</title>
+    <title>Central de Sistemas</title>
     <link rel="icon" type="image/png" href="photos/logo-latem.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
-        :root {
-            --primary: #2563eb;
-            --primary-dark: #1e40af;
-            --secondary: #64748b;
-            --bg-body: #f1f5f9;
-            --bg-card: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --danger: #ef4444;
-            --success: #22c55e;
-            --warning: #f59e0b;
-            --display-bg: #0f172a;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-        }
-
-        .hidden { display: none !important; }
-
-        /* --- Toast Notifications --- */
-        #toast-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 11000;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .toast {
-            background: white;
-            padding: 15px 20px;
-            border-radius: 12px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            min-width: 300px;
-            animation: slideIn 0.3s ease-out forwards;
-            border-left: 5px solid var(--primary);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .toast.success { border-left-color: var(--success); }
-        .toast.error { border-left-color: var(--danger); }
-        .toast.info { border-left-color: var(--primary); }
-
-        .toast i { font-size: 1.2rem; }
-        .toast.success i { color: var(--success); }
-        .toast.error i { color: var(--danger); }
-        .toast.info i { color: var(--primary); }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
+        /* CSS PADRONIZADO E ALINHADO COM OS MÓDULOS */
+        :root{--primary:#2563eb;--primary-dark:#1e40af;--secondary:#64748b;--bg-body:#f1f5f9;--bg-card:#ffffff;--text-main:#1e293b;--danger:#ef4444;--success:#22c55e;--warning:#f59e0b;--display-bg:#0f172a}
+        *{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif} body{background-color:var(--bg-body);color:var(--text-main);height:100vh;overflow:hidden;display:flex} .hidden{display:none !important}
         
-        @keyframes fadeOut {
-            to { opacity: 0; transform: translateY(-20px); }
-        }
-
-        /* --- Modals (Login) --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.95);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-        }
-
-        .login-box {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            width: 400px;
-            text-align: center;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            text-align: left;
-        }
-
-        select, input {
-            padding: 12px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            outline: none;
-            transition: 0.2s;
-            background: #f8fafc;
-            width: 100%;
-        }
-
-        select:focus, input:focus {
-            border-color: var(--primary);
-            background: white;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 0.95rem;
-        }
+        #toast-container{position:fixed;top:20px;right:20px;z-index:11000;display:flex;flex-direction:column;gap:10px}
+        .toast{background:white;padding:15px 20px;border-radius:12px;box-shadow:0 10px 15px -3px rgba(0,0,0,0.1);display:flex;align-items:center;gap:12px;min-width:300px;animation:slideIn 0.3s ease-out forwards;border-left:5px solid var(--primary);font-size:0.9rem;font-weight:500}
+        .toast.success{border-left-color:var(--success)} .toast.error{border-left-color:var(--danger)} .toast.warning{border-left-color:var(--warning)} .toast.info{border-left-color:var(--primary)}
+        .toast i{font-size:1.2rem} .toast.success i{color:var(--success)} .toast.error i{color:var(--danger)} .toast.warning i{color:var(--warning)} .toast.info i{color:var(--primary)}
+        @keyframes slideIn{from{transform:translateX(100%);opacity:0} to{transform:translateX(0);opacity:1}} @keyframes fadeOut{to{opacity:0;transform:translateY(-20px)}}
         
-        .btn-primary:hover { background: var(--primary-dark); }
-
-        /* --- Sidebar --- */
-        .sidebar {
-            width: 80px;
-            background-color: var(--display-bg);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 20px;
-            transition: width 0.3s;
-            z-index: 10;
-        }
+        /* Modal e Login */
+        .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15, 23, 42, 0.95);display:flex;justify-content:center;align-items:center;z-index:10000}
+        .login-box{background:white;padding:40px;border-radius:20px;width:400px;text-align:center;box-shadow:0 20px 25px -5px rgba(0,0,0,0.2);overflow:visible}
+        .input-group{display:flex;flex-direction:column;gap:4px;text-align:left;position:relative} 
+        input{padding:12px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.95rem;outline:none;transition:0.2s;background:#f8fafc;width:100%}
+        input:focus{border-color:var(--primary);background:white;box-shadow:0 0 0 3px rgba(37,99,235,0.1)}
+        .btn-primary{background:var(--primary);color:white;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;transition:0.2s;font-size:0.95rem;width:100%;display:flex;justify-content:center;align-items:center;gap:8px} 
+        .btn-primary:hover{background:var(--primary-dark)}
         
-        .sidebar:hover { width: 200px; }
-
-        .logo-area {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 40px;
-            overflow: hidden;
-            background: white;
-            padding: 5px;
-        }
+        /* Dropdown Autocomplete Customizado (Adaptado para o Login) */
+        .custom-autocomplete-wrapper { position: relative; width: 100%; }
+        .custom-autocomplete-list { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #e2e8f0; border-radius: 8px; max-height: 200px; overflow-y: auto; z-index: 10001; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.2); list-style: none; padding: 0; margin-top: 4px; text-align:left; }
+        .custom-autocomplete-list li { padding: 10px 15px; cursor: pointer; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; color: var(--text-main); }
+        .custom-autocomplete-list li:hover { background: #eff6ff; color: var(--primary); font-weight: 600; }
         
-        .logo-area img { width: 100%; height: 100%; object-fit: contain; }
-
-        .nav-item {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            padding: 15px 0;
-            cursor: pointer;
-            color: #94a3b8;
-            transition: 0.2s;
-            text-decoration: none;
-        }
-
-        .nav-item:hover, .nav-item.active {
-            background-color: rgba(255,255,255,0.1);
-            color: white;
-            border-left: 4px solid var(--primary);
-        }
-
-        .nav-icon { width: 80px; text-align: center; font-size: 1.2rem; }
-        .nav-text { white-space: nowrap; opacity: 0; transition: opacity 0.2s; }
-        .sidebar:hover .nav-text { opacity: 1; }
-
-        /* --- Main Content --- */
-        .main-content {
-            flex: 1;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            height: 100vh;
-            overflow-y: auto;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--bg-card);
-            padding: 15px 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        }
-
-        .header-left h1 { font-size: 1.2rem; color: var(--text-main); font-weight: 600; }
-        .header-left p { font-size: 0.85rem; color: var(--secondary); }
-
-        .header-center {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--text-main);
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .clock-display {
-            background: #f1f5f9;
-            padding: 5px 15px;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .user-info { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; }
-        .user-avatar { width: 35px; height: 35px; background: var(--secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; }
-
-        /* --- Dashboard Grid --- */
-        .dashboard-wrapper {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .dashboard-title { text-align: center; margin-bottom: 40px; color: var(--text-main); }
-        .dashboard-title h2 { font-size: 2rem; font-weight: 700; margin-bottom: 10px; }
-        .dashboard-title p { color: var(--secondary); font-size: 1rem; }
-
-        .systems-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 25px;
-            max-width: 900px;
-            width: 100%;
-        }
-
-        .system-card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 30px 20px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e2e8f0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .system-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 4px;
-            background: var(--primary);
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-            transform-origin: left;
-        }
-
-        .system-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.1);
-            border-color: #cbd5e1;
-        }
-
-        .system-card:hover::before { transform: scaleX(1); }
-
-        .icon-wrapper {
-            width: 70px; height: 70px;
-            background: #eff6ff; color: var(--primary);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 2rem; margin-bottom: 20px; transition: 0.3s;
-        }
-
-        .system-card:hover .icon-wrapper { background: var(--primary); color: white; }
-        .system-card h3 { font-size: 1.2rem; color: var(--text-main); margin-bottom: 10px; font-weight: 700; }
-        .system-card p { font-size: 0.9rem; color: var(--secondary); margin-bottom: 20px; line-height: 1.4; }
-
-        .btn-access {
-            background: var(--bg-body); color: var(--primary);
-            padding: 8px 20px; border-radius: 20px; font-weight: 600;
-            font-size: 0.85rem; display: flex; align-items: center; gap: 8px; transition: 0.2s;
-        }
-
-        .system-card:hover .btn-access { background: var(--primary); color: white; }
-
-        @media (max-width: 768px) {
-            .systems-grid { grid-template-columns: 1fr; }
-            .sidebar { display: none; }
-        }
+        /* Sidebar */
+        .sidebar{width:80px;background-color:var(--display-bg);display:flex;flex-direction:column;align-items:center;padding-top:20px;transition:width 0.3s;z-index:10} .sidebar:hover{width:200px}
+        .logo-area{width:60px;height:60px;border-radius:12px;display:flex;justify-content:center;align-items:center;margin-bottom:40px;overflow:hidden;background:white;padding:5px} .logo-area img{width:100%;height:100%;object-fit:contain}
+        .nav-item{width:100%;display:flex;align-items:center;padding:15px 0;cursor:pointer;color:#94a3b8;transition:0.2s;text-decoration:none} .nav-item:hover,.nav-item.active{background-color:rgba(255,255,255,0.1);color:white;border-left:4px solid var(--primary)}
+        .nav-icon{width:80px;text-align:center;font-size:1.2rem} .nav-text{white-space:nowrap;opacity:0;transition:opacity 0.2s} .sidebar:hover .nav-text{opacity:1}
+        
+        /* Layout Principal */
+        .main-content{flex:1;padding:20px;display:flex;flex-direction:column;gap:20px;height:100vh;overflow-y:auto}
+        header{display:flex;justify-content:space-between;align-items:center;background:var(--bg-card);padding:15px 25px;border-radius:12px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05)}
+        .header-left h1{font-size:1.2rem;color:var(--text-main);font-weight:600} .header-center{font-size:1.2rem;font-weight:600;color:var(--text-main);display:flex;gap:10px;align-items:center}
+        .clock-display{background:#f1f5f9;padding:5px 15px;border-radius:8px;font-family:'Courier New',monospace;font-weight:700;color:var(--primary)}
+        .user-info{display:flex;align-items:center;gap:10px;font-size:0.9rem} .user-avatar{width:35px;height:35px;background:var(--secondary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;text-transform:uppercase;font-weight:bold}
+        
+        /* Dashboard Cards */
+        .dashboard-wrapper{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px} .dashboard-title{text-align:center;margin-bottom:40px;color:var(--text-main)} .dashboard-title h2{font-size:2rem;font-weight:700;margin-bottom:10px}
+        .systems-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:25px;max-width:900px;width:100%}
+        .system-card{background:var(--bg-card);border-radius:16px;padding:30px 20px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);border:1px solid #e2e8f0;display:flex;flex-direction:column;align-items:center;text-align:center;text-decoration:none;transition:all 0.3s ease;position:relative;overflow:hidden}
+        .system-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:4px;background:var(--primary);transform:scaleX(0);transition:transform 0.3s ease;transform-origin:left}
+        .system-card:hover{transform:translateY(-5px);box-shadow:0 12px 20px -5px rgba(0,0,0,0.1);border-color:#cbd5e1} .system-card:hover::before{transform:scaleX(1)}
+        .icon-wrapper{width:70px;height:70px;background:#eff6ff;color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;margin-bottom:20px;transition:0.3s}
+        .system-card:hover .icon-wrapper{background:var(--primary);color:white} .system-card h3{font-size:1.2rem;color:var(--text-main);margin-bottom:10px;font-weight:700} .system-card p{font-size:0.9rem;color:var(--secondary);margin-bottom:20px}
+        .btn-access{background:var(--bg-body);color:var(--primary);padding:8px 20px;border-radius:20px;font-weight:600;font-size:0.85rem;display:flex;align-items:center;gap:8px;transition:0.2s} .system-card:hover .btn-access{background:var(--primary);color:white}
+        
+        @media (max-width:768px){.systems-grid{grid-template-columns:1fr} .sidebar{display:none}}
     </style>
 </head>
 <body>
-
     <div id="toast-container"></div>
-
-    <div id="duplicateTabModal" class="modal-overlay hidden" style="z-index: 99999; background: var(--bg-body);">
-        <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 450px; text-align: center;">
-            <i class="fa-solid fa-triangle-exclamation" style="font-size: 3.5rem; color: var(--warning); margin-bottom: 20px;"></i>
-            <h2 style="margin-bottom: 10px; color: var(--text-main);">Sistema já aberto!</h2>
-            <p style="color: var(--secondary); margin-bottom: 25px; line-height: 1.5;">
-                Identifiquei um sistema da Latem já em uso em outra aba ou janela neste computador. 
-                <br><br>
-                Para evitar erros e travamentos, por favor, volte para a aba que já está aberta.
-            </p>
+    
+    <div id="duplicateTabModal" class="modal-overlay hidden" style="z-index:99999;background:var(--bg-body)">
+        <div style="background:white;padding:40px;border-radius:20px;box-shadow:0 10px 25px rgba(0,0,0,0.1);max-width:450px;text-align:center">
+            <i class="fa-solid fa-triangle-exclamation" style="font-size:3.5rem;color:var(--warning);margin-bottom:20px"></i>
+            <h2 style="margin-bottom:10px;color:var(--text-main)">Sistema já aberto!</h2>
+            <p style="color:var(--secondary);margin-bottom:25px;line-height:1.5">Identifiquei um sistema da Latem já em uso em outra aba. Volte para a aba que já está aberta para evitar conflitos de dados.</p>
         </div>
     </div>
-
+    
     <div id="loginModal" class="modal-overlay">
         <div class="login-box">
-            <div style="margin-bottom: 20px; display: flex; justify-content: center;">
-                <img src="photos/logo-latem.png" alt="Logo" style="max-height: 80px; max-width: 100%;" onerror="this.style.display='none'">
+            <div style="margin-bottom:20px;display:flex;justify-content:center">
+                <img src="photos/logo-latem.png" alt="Logo Latem" style="max-height:80px;max-width:100%" onerror="this.style.display='none'">
             </div>
-            <h2 style="margin-bottom: 10px;">Central de Sistemas</h2>
-            <p style="color: var(--secondary); margin-bottom: 25px;">Acesso ao Painel Central</p>
+            <h2 style="margin-bottom:10px">Central de Sistemas</h2>
+            <p style="color:var(--secondary);margin-bottom:25px">Acesso ao Painel Central</p>
             
-            <form id="loginForm" class="input-group">
-                <select id="username" required>
-                    <option value="">Selecione um usuário...</option>
-                </select>
-                <input type="password" id="password" placeholder="Senha" required style="margin-top: 10px;">
-                <button type="submit" class="btn-primary" style="margin-top: 20px; width: 100%;">Entrar</button>
+            <form id="loginForm">
+                <div class="input-group" style="margin-bottom:10px;">
+                    <input type="text" id="username" placeholder="Selecione o usuário..." required autocomplete="off">
+                </div>
+                
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="Senha" required>
+                </div>
+                
+                <button type="submit" class="btn-primary" style="margin-top:20px;">
+                    <i class="fa-solid fa-right-to-bracket"></i> Entrar
+                </button>
+                <p id="loginError" style="color:var(--danger);font-size:0.85rem;margin-top:12px;font-weight:600;" class="hidden">
+                    <i class="fa-solid fa-circle-exclamation"></i> Usuário ou Senha incorretos.
+                </p>
             </form>
-            <p id="loginError" style="color: var(--danger); font-size: 0.8rem; margin-top: 10px;" class="hidden">Senha incorreta.</p>
         </div>
     </div>
 
     <nav class="sidebar">
-        <div class="logo-area">
-            <img src="photos/logo-latem.png" alt="Logo" onerror="this.style.display='none'">
-        </div>
-        
-        <a href="#" class="nav-item active">
-            <div class="nav-icon"><i class="fa-solid fa-table-cells-large"></i></div>
-            <span class="nav-text">Painel Principal</span>
-        </a>
-
-        <div style="margin-top: auto; width: 100%; margin-bottom: 20px;">
-            <a href="#" class="nav-item" onclick="logout()">
-                <div class="nav-icon"><i class="fa-solid fa-right-from-bracket"></i></div>
-                <span class="nav-text">Sair</span>
+        <div class="logo-area"><img src="photos/logo-latem.png" alt="Logo" onerror="this.style.display='none'"></div>
+        <a href="#" class="nav-item active"><div class="nav-icon"><i class="fa-solid fa-table-cells-large"></i></div><span class="nav-text">Painel Principal</span></a>
+        <div style="margin-top:auto;width:100%;margin-bottom:20px">
+            <a href="#" class="nav-item" onclick="event.preventDefault(); logout()">
+                <div class="nav-icon"><i class="fa-solid fa-right-from-bracket"></i></div><span class="nav-text">Sair</span>
             </a>
         </div>
     </nav>
 
     <main class="main-content">
-        
         <header>
-            <div class="header-left">
-                <h1>Central de Sistemas da Latem</h1>
-            </div>
-
+            <div class="header-left"><h1>Central de Sistemas da Latem</h1></div>
             <div class="header-center">
-                <i class="fa-regular fa-clock" style="color: var(--primary);"></i>
+                <i class="fa-regular fa-clock" style="color:var(--primary)"></i>
                 <div class="clock-display" id="clock">00:00:00</div>
-                <div style="font-size: 0.9rem; color: var(--secondary);" id="date">01/01/2024</div>
+                <div style="font-size:0.9rem;color:var(--secondary);font-weight:600;" id="date">01/01/2024</div>
             </div>
-
             <div class="user-info">
                 <span id="userNameDisplay">---</span>
-                <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
+                <div class="user-avatar" id="userAvatarIcon"><i class="fa-solid fa-user"></i></div>
             </div>
         </header>
 
@@ -395,160 +126,158 @@
                 <h2 id="welcomeMessage">Seja bem-vindo!</h2>
                 <p>Qual módulo deseja acessar?</p>
             </div>
-
+            
             <div class="systems-grid">
-                
                 <a href="./sistema_pesagem_mp/index.html" class="system-card">
-                    <div class="icon-wrapper"><i class="fa-solid fa-cubes"></i></div>
+                    <div class="icon-wrapper"><i class="fa-solid fa-scale-balanced"></i></div>
                     <h3>Pesagem de Matéria Prima</h3>
-                    <p>Módulo de pesagem de matéria-prima</p>
-                    <span class="btn-access">Acessar Pesagem <i class="fa-solid fa-arrow-right"></i></span>
+                    <span class="btn-access">Acessar <i class="fa-solid fa-arrow-right"></i></span>
                 </a>
-
                 <a href="./sistema_pesagem_tl/index.html" class="system-card">
-                    <div class="icon-wrapper"><i class="fa-solid fa-layer-group"></i></div>
-                    <h3>Pesagem de Lingotes/Tarugos</h3>
-                    <p>Módulo de pesagem de lingotes e tarugos</p>
-                    <span class="btn-access">Acessar Pesagem <i class="fa-solid fa-arrow-right"></i></span>
+                    <div class="icon-wrapper"><i class="fa-solid fa-scale-balanced"></i></div>
+                    <h3>Pesagem de Tarugos e Lingotes</h3>
+                    <span class="btn-access">Acessar <i class="fa-solid fa-arrow-right"></i></span>
                 </a>
-
-
                 <a href="./sistema_identificacao_mp/index.html" class="system-card">
-                    <div class="icon-wrapper"><i class="fa-solid fa-cubes"></i></div>
+                    <div class="icon-wrapper"><i class="fa-solid fa-tags"></i></div>
                     <h3>Identificação de Matéria Prima</h3>
-                    <p>Módulo de identificação de matéria-prima</p>
-                    <span class="btn-access">Acessar Identificação <i class="fa-solid fa-arrow-right"></i></span>
+                    <span class="btn-access">Acessar <i class="fa-solid fa-arrow-right"></i></span>
                 </a>
-
                 <a href="./sistema_identificacao_tl/index.html" class="system-card">
-                    <div class="icon-wrapper"><i class="fa-solid fa-layer-group"></i></div>
-                    <h3>Identificação de Lingotes/Tarugos</h3>
-                    <p>Módulo de identificação de lingotes e tarugos</p>
-                    <span class="btn-access">Acessar Identificação <i class="fa-solid fa-arrow-right"></i></span>
+                    <div class="icon-wrapper"><i class="fa-solid fa-tags"></i></div>
+                    <h3>Identificação de Tarugos e Lingotes</h3>
+                    <span class="btn-access">Acessar <i class="fa-solid fa-arrow-right"></i></span>
                 </a>
-
             </div>
         </div>
-
     </main>
 
     <script>
-        // --- BLOQUEIO GLOBAL DE MÚLTIPLAS ABAS ---
+        // --- PREVENÇÃO DE DUPLICIDADE ---
         const globalTabChannel = new BroadcastChannel('latem_global_lock');
-        
-        globalTabChannel.onmessage = (event) => {
-            if (event.data === 'TEM_ALGUEM_AI') {
-                globalTabChannel.postMessage('EU_JA_ESTOU_AQUI');
-            } 
-            else if (event.data === 'EU_JA_ESTOU_AQUI') {
-                document.getElementById('duplicateTabModal').classList.remove('hidden');
-            }
+        globalTabChannel.onmessage = (e) => {
+            if(e.data === 'TEM_ALGUEM_AI') globalTabChannel.postMessage('EU_JA_ESTOU_AQUI');
+            else if(e.data === 'EU_JA_ESTOU_AQUI') document.getElementById('duplicateTabModal').classList.remove('hidden');
         };
+        setTimeout(() => globalTabChannel.postMessage('TEM_ALGUEM_AI'), 100);
 
-        setTimeout(() => {
-            globalTabChannel.postMessage('TEM_ALGUEM_AI');
-        }, 100);
-
-        // --- TOAST NOTIFICATIONS ---
-        function showToast(message, type = 'success') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            
-            let icon = 'check-circle';
-            if(type === 'error') icon = 'circle-exclamation';
-            if(type === 'info') icon = 'circle-info';
-
-            toast.innerHTML = `<i class="fa-solid fa-${icon}"></i> <span>${message}</span>`;
-            container.appendChild(toast);
-
-            setTimeout(() => {
-                toast.style.animation = 'fadeOut 0.5s ease-out forwards';
-                setTimeout(() => toast.remove(), 500);
-            }, 3000);
+        // --- UTILITÁRIOS ---
+        function showToast(msg, type='success') {
+            const c = document.getElementById('toast-container'), t = document.createElement('div');
+            t.className = `toast ${type}`;
+            let icon = type === 'error' ? 'circle-exclamation' : (type === 'warning' ? 'triangle-exclamation' : (type === 'info' ? 'circle-info' : 'check-circle'));
+            t.innerHTML = `<i class="fa-solid fa-${icon}"></i> <span>${msg}</span>`; 
+            c.appendChild(t);
+            setTimeout(() => { t.style.animation = 'fadeOut 0.5s ease-out forwards'; setTimeout(() => t.remove(), 500) }, 3000);
         }
 
-        // --- RELÓGIO E DATA ---
         function updateClock() {
-            const now = new Date();
-            document.getElementById('clock').innerText = now.toLocaleTimeString('pt-BR');
-            document.getElementById('date').innerText = now.toLocaleDateString('pt-BR');
+            const n = new Date();
+            document.getElementById('clock').innerText = n.toLocaleTimeString('pt-BR');
+            document.getElementById('date').innerText = n.toLocaleDateString('pt-BR');
         }
-        setInterval(updateClock, 1000);
-        updateClock();
+        setInterval(updateClock, 1000); updateClock();
 
-        // --- SISTEMA DE LOGIN ---
-        const loginModal = document.getElementById('loginModal');
-        const loginForm = document.getElementById('loginForm');
-        const userNameDisplay = document.getElementById('userNameDisplay');
-        const loginError = document.getElementById('loginError');
+        // --- SISTEMA DE AUTOCOMPLETE CUSTOMIZADO ---
+        function setupAutocomplete(inputId, optionsArray) {
+            const input = document.getElementById(inputId);
+            input.setAttribute('autocomplete', 'off');
+            const wrapper = document.createElement('div');
+            wrapper.className = 'custom-autocomplete-wrapper';
+            input.parentNode.insertBefore(wrapper, input);
+            wrapper.appendChild(input);
 
-        // Usuários padrão 
+            const list = document.createElement('ul');
+            list.className = 'custom-autocomplete-list hidden';
+            wrapper.appendChild(list);
+
+            function showOptions(filterStr) {
+                list.innerHTML = '';
+                const filtered = filterStr ? optionsArray.filter(o => o.toLowerCase().includes(filterStr.toLowerCase())) : optionsArray;
+                if (filtered.length === 0) { list.classList.add('hidden'); return; }
+                filtered.forEach(o => {
+                    const li = document.createElement('li');
+                    li.textContent = o;
+                    li.onmousedown = (e) => { 
+                        e.preventDefault(); 
+                        input.value = o; 
+                        list.classList.add('hidden'); 
+                        // Foca no campo de senha logo após escolher o usuário para agilizar
+                        document.getElementById('password').focus();
+                    };
+                    list.appendChild(li);
+                });
+                list.classList.remove('hidden');
+            }
+
+            input.addEventListener('focus', () => showOptions(input.value));
+            input.addEventListener('input', () => showOptions(input.value));
+            input.addEventListener('blur', () => setTimeout(()=> list.classList.add('hidden'), 150));
+        }
+
+        // --- USUÁRIOS E LOGIN ---
         const DEFAULT_USERS = [
-            { user: 'admin', pass: 'admin' },
-            { user: 'operador', pass: 'operador' }
+            {user:'Diego',pass:'150521'},{user:'Fabiano',pass:'1234'},{user:'Antonio',pass:'1234'},{user:'Luciano',pass:'1234'},
+            {user:'Vilmar',pass:'1234'},{user:'Adilson F.',pass:'1234'},{user:'Matias',pass:'1234'},{user:'Benedito',pass:'1234'},
+            {user:'Ivanildo',pass:'1234'},{user:'Domingos',pass:'1234'},{user:'Valter',pass:'1234'}
         ];
 
-        function getUsers() {
-            return JSON.parse(localStorage.getItem('latem_users')) || DEFAULT_USERS;
-        }
-
-        function renderUserSelect() {
-            const users = getUsers();
-            const select = document.getElementById('username');
-            select.innerHTML = '<option value="">Selecione um usuário...</option>';
-            users.forEach(u => {
-                const option = document.createElement('option');
-                option.value = u.user;
-                option.textContent = u.user;
-                select.appendChild(option);
-            });
-        }
-
-        // Verifica o login ao carregar a página
         window.onload = () => {
-            renderUserSelect();
-            const loggedUser = localStorage.getItem('latem_user');
+            // Extrai apenas os nomes para alimentar o Autocomplete
+            const userNames = DEFAULT_USERS.map(u => u.user);
+            setupAutocomplete('username', userNames);
             
+            const loggedUser = localStorage.getItem('latem_user');
             if(loggedUser) {
-                loginModal.classList.add('hidden');
-                userNameDisplay.innerText = loggedUser;
-                document.getElementById('welcomeMessage').innerText = "Bem-vindo ao Sistemas da Latem, " + loggedUser + "!";
-            } else {
-                loginModal.classList.remove('hidden');
+                // Se já estiver logado, oculta o modal de login e atualiza a interface
+                document.getElementById('loginModal').classList.add('hidden');
+                document.getElementById('userNameDisplay').innerText = loggedUser;
+                document.getElementById('userAvatarIcon').innerText = loggedUser.charAt(0).toUpperCase();
+                document.getElementById('welcomeMessage').innerText = "Bem-vindo(a), " + loggedUser + "!";
+            } else { 
+                document.getElementById('loginModal').classList.remove('hidden'); 
+                document.getElementById('username').focus();
             }
         };
 
-        // Evento de submissão do formulário
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const user = document.getElementById('username').value;
-            const pass = document.getElementById('password').value;
-            const users = getUsers();
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault(); 
+            const u = document.getElementById('username').value.trim();
+            const p = document.getElementById('password').value;
             
-            const found = users.find(u => u.user === user && u.pass === pass);
+            // Procura se existe correspondência exata de usuário e senha
+            const f = DEFAULT_USERS.find(x => x.user.toLowerCase() === u.toLowerCase() && x.pass === p);
             
-            if (found) {
-                localStorage.setItem('latem_user', found.user);
-                loginModal.classList.add('hidden');
-                userNameDisplay.innerText = found.user;
-                document.getElementById('welcomeMessage').innerText = "Bem-vindo ao Sistemas da Latem, " + found.user + "!";
-                loginError.classList.add('hidden');
+            if(f) {
+                localStorage.setItem('latem_user', f.user); 
+                document.getElementById('loginModal').classList.add('hidden');
+                document.getElementById('userNameDisplay').innerText = f.user; 
+                document.getElementById('userAvatarIcon').innerText = f.user.charAt(0).toUpperCase();
+                document.getElementById('welcomeMessage').innerText = "Bem-vindo(a), " + f.user + "!"; 
+                document.getElementById('loginError').classList.add('hidden');
+                document.getElementById('password').value = ''; // Limpa a senha por segurança
                 showToast("Login realizado com sucesso!", "success");
-            } else {
-                loginError.classList.remove('hidden');
+            } else { 
+                document.getElementById('loginError').classList.remove('hidden'); 
+                // Dá um pequeno tremor na caixa de login para indicar erro (UX)
+                const loginBox = document.querySelector('.login-box');
+                loginBox.style.transform = 'translateX(-10px)';
+                setTimeout(() => loginBox.style.transform = 'translateX(10px)', 100);
+                setTimeout(() => loginBox.style.transform = 'translateX(-10px)', 200);
+                setTimeout(() => loginBox.style.transform = 'translateX(0)', 300);
             }
         });
 
-        // Evento de Sair (Logout)
         function logout() {
-            localStorage.removeItem('latem_user');
+            localStorage.removeItem('latem_user'); 
             showToast("Sessão encerrada.", "info");
             setTimeout(() => {
-                loginModal.classList.remove('hidden');
-                loginForm.reset();
-                userNameDisplay.innerText = '---';
-                document.getElementById('welcomeMessage').innerText = "Bem-vindo ao Sistemas da Latem";
+                document.getElementById('loginModal').classList.remove('hidden');
+                document.getElementById('loginForm').reset();
+                document.getElementById('userNameDisplay').innerText = '---';
+                document.getElementById('userAvatarIcon').innerHTML = '<i class="fa-solid fa-user"></i>';
+                document.getElementById('welcomeMessage').innerText = "Seja bem-vindo!";
+                document.getElementById('username').focus();
             }, 500);
         }
     </script>
