@@ -60,26 +60,51 @@
         .table-container{overflow-y:auto;flex:1} table{width:100%;border-collapse:collapse;font-size:0.85rem} th{text-align:left;padding:12px;background:#f8fafc;color:var(--secondary);font-weight:700;position:sticky;top:0;z-index:5} td{padding:10px 12px;border-bottom:1px solid #e2e8f0;vertical-align:middle}
         
         .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.9);display:flex;justify-content:center;align-items:center;z-index:1000}
-        .etiqueta-modal{background:white;width:380px;display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2000;flex-direction:column;box-shadow:0 0 50px rgba(0,0,0,0.5);font-family:'Courier New',monospace;border-radius:8px;overflow:hidden;}
-        .relatorio-modal{background:white;width:800px;max-height:90vh;display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2000;flex-direction:column;box-shadow:0 0 50px rgba(0,0,0,0.5);border-radius:8px;overflow:hidden} 
-        .relatorio-content{padding:40px;overflow-y:auto;flex:1;font-family:Arial,sans-serif;color:black} 
-        .relatorio-header{text-align:center;margin-bottom:20px;border-bottom:2px solid #000;padding-bottom:15px} 
-        .relatorio-table{width:100%;border-collapse:collapse;margin-top:20px;font-size:12px} .relatorio-table th{background:#eee;font-weight:bold;border-bottom:2px solid #000;padding:8px;text-align:left} .relatorio-table td{padding:8px;border-bottom:1px solid #f0f0f0}
         
-        @media print{ 
-            @page{size:100mm 100mm; margin:0;} 
-            body *{visibility:hidden} 
-            .printing-label #etiquetaModal, .printing-label #etiquetaModal *{visibility:visible} 
-            .printing-label #etiquetaModal{position:absolute!important;left:0!important;top:0!important;width:100mm!important;height:100mm!important;display:flex!important;flex-direction:column!important;justify-content:center!important;border:none!important;box-shadow:none!important;transform:none!important;margin:0!important;box-sizing:border-box!important;border-radius:0!important} 
-            .printing-label #etiquetaArea {padding:5mm!important; width:100%!important; height:100%!important; display:flex!important; flex-direction:column!important; justify-content:space-between!important;}
-            .printing-label .btn-print-area{display:none!important} 
+        /* Modal de Visualização da Etiqueta (na tela) */
+        .etiqueta-modal { background:white; width: 380px; display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index:2000; flex-direction:column; box-shadow:0 0 50px rgba(0,0,0,0.5); font-family:'Courier New',monospace; border-radius:8px; overflow:hidden; }
+        .etiqueta-content { padding:15px; display:flex; flex-direction:column; background: white; }
+        
+        /* Modal de Visualização do Relatório (na tela) */
+        .relatorio-modal { background:white; width:800px; max-height:90vh; display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index:2000; flex-direction:column; box-shadow:0 0 50px rgba(0,0,0,0.5); border-radius:8px; overflow:hidden; } 
+        .relatorio-content { padding:40px; overflow-y:auto; flex:1; font-family:Arial,sans-serif; color:black; } 
+        .relatorio-header { text-align:center; margin-bottom:20px; border-bottom:2px solid #000; padding-bottom:15px; } 
+        .relatorio-table { width:100%; border-collapse:collapse; margin-top:20px; font-size:12px; } .relatorio-table th { background:#eee; font-weight:bold; border-bottom:2px solid #000; padding:8px; text-align:left; } .relatorio-table td { padding:8px; border-bottom:1px solid #f0f0f0; }
+
+        /* ==========================================================================
+           REGRAS ESTRITAS DE IMPRESSÃO (ETIQUETA 100x70mm E RELATÓRIO A4)
+           ========================================================================== */
+        @media print {
+            /* Regras Específicas para Etiqueta Térmica */
+            body.printing-label { margin: 0 !important; padding: 0 !important; background: white !important; }
+            .printing-label @page { size: 100mm 70mm; margin: 0; }
+            .printing-label * { visibility: hidden; }
+            .printing-label #etiquetaModal, .printing-label #etiquetaModal * { visibility: visible; }
+            .printing-label #etiquetaModal {
+                position: absolute; left: 0; top: 0; width: 100mm; height: 70mm;
+                margin: 0; padding: 0; border: none; box-shadow: none; transform: none; border-radius: 0;
+                display: block; background: white;
+            }
+            .printing-label #etiquetaArea {
+                width: 100mm; height: 70mm; padding: 4mm; box-sizing: border-box;
+                display: flex; flex-direction: column; justify-content: space-between;
+            }
+            .printing-label .btn-print-area { display: none !important; }
+
+            /* Regras Específicas para Relatório A4 */
+            body.printing-report { margin: 0 !important; padding: 0 !important; background: white !important; }
+            .printing-report @page { size: A4 portrait; margin: 10mm; }
+            .printing-report * { visibility: hidden; }
+            .printing-report #relatorioModal, .printing-report #relatorioModal * { visibility: visible; }
+            .printing-report #relatorioModal {
+                position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0;
+                border: none; box-shadow: none; transform: none; max-height: none; border-radius: 0;
+                display: block; background: transparent;
+            }
+            .printing-report .relatorio-content { width: 190mm; margin: 0 auto; padding: 0; }
+            .printing-report .relatorio-footer { display: none !important; }
             
-            .printing-report @page{size:A4 portrait;margin:10mm} 
-            .printing-report #relatorioModal, .printing-report #relatorioModal *{visibility:visible} 
-            .printing-report #relatorioModal{position:absolute!important;left:0!important;top:0!important;width:100%!important;display:block!important;border:none!important;box-shadow:none!important;transform:none!important;max-height:none!important;border-radius:0!important} 
-            .printing-report .relatorio-content{padding:0!important;overflow:visible!important;width:100%!important} 
-            .printing-report .relatorio-footer{display:none!important} 
-            header,.sidebar,.actions,.form-section,.weight-controls{display:none!important} 
+            header, .sidebar, .actions, .form-section, .weight-controls { display: none !important; }
         }
     </style>
 </head>
@@ -89,7 +114,7 @@
     <div id="toast-container"></div>
     
     <div id="etiquetaModal" class="etiqueta-modal">
-        <div id="etiquetaArea" style="background:white; padding:15px; display:flex; flex-direction:column;"></div>
+        <div id="etiquetaArea" class="etiqueta-content" style="height:265px;"></div>
         <div class="btn-print-area" style="padding:10px;border-top:1px solid #eee;background:#f8fafc;display:flex;gap:10px;">
             <button class="btn btn-primary" onclick="imprimirEtiqueta()" style="flex:1"><i class="fa-solid fa-print"></i> Imprimir</button>
             <button class="btn btn-secondary" onclick="fecharEtiqueta()" style="flex:1">Fechar</button>
@@ -164,7 +189,7 @@
                 <div class="card-title" style="margin-bottom:10px; display:flex; justify-content:space-between;"><span><i class="fa-solid fa-list-check"></i> Registros</span></div>
                 <div class="table-container">
                     <table id="historyTable">
-                        <thead><tr><th>Material</th><th>Local</th><th style="text-align:right">Peso Líquido</th><th style="text-align:right">Tara</th><th style="text-align:right">Peso Bruto</th><th style="text-align:center">Ações</th></tr></thead>
+                        <thead><tr><th>Ticket</th><th>Material</th><th>Local</th><th style="text-align:right">Peso Líquido</th><th style="text-align:right">Tara</th><th style="text-align:right">Peso Bruto</th><th style="text-align:center">Ações</th></tr></thead>
                         <tbody></tbody>
                     </table>
                 </div>
@@ -220,6 +245,7 @@
             input.addEventListener('blur', () => setTimeout(()=> list.classList.add('hidden'), 150));
         }
 
+        // PREENCHA COM SEUS FORNECEDORES E MATERIAIS
         const listaFornecedores = ["FORNECEDOR 1", "FORNECEDOR 2"];
         const listaMateriais = ["MATERIAL A", "MATERIAL B"]; 
         const listaLocais = ["Patio", "AC", "RB", "A01", "A02", "A03", "Casinha Borra", "Sem Localização"];
@@ -267,31 +293,33 @@
             const db=getDb();db.unshift(r);saveDb(db);lockFields();showToast("Pesagem registada com sucesso!");
             
             document.getElementById('etiquetaArea').innerHTML=`
-                <div style="text-align:center;border-bottom:2px solid black;padding-bottom:5px;margin-bottom:8px">
-                    <img src="../photos/logo-latem.png" style="max-height:40px;display:block;margin:0 auto 5px auto">
-                    <span style="font-size:12px;font-weight:bold;display:block">COMPROVANTE DE PESAGEM</span>
-                </div>
-                <div style="font-size:11px;line-height:1.4;display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
-                    <div style="text-align:left">
-                        <div><strong>Data:</strong> ${r.data}</div>
-                        <div style="margin-top:2px"><strong>Hora:</strong> ${r.hora}</div>
-                        <div style="margin-top:2px"><strong>Responsável:</strong> ${r.responsavel.toUpperCase()}</div>
+                <div style="height:100%; display:flex; flex-direction:column; justify-content:space-between; box-sizing:border-box;">
+                    <div style="text-align:center;border-bottom:2px solid black;padding-bottom:2mm;margin-bottom:2mm">
+                        <img src="../photos/logo-latem.png" style="max-height:10mm;margin-bottom:1mm">
+                        <div style="font-size:12px;font-weight:bold;letter-spacing:1px">COMPROVANTE DE PESAGEM</div>
                     </div>
-                    <div style="text-align:right">
-                        <div><strong>Ticket:</strong> ${r.ticket}</div>
-                        <div style="margin-top:2px"><strong>Fornecedor:</strong> ${r.fornecedor}</div>
-                        <div style="margin-top:2px"><strong>Material:</strong> ${r.material}</div>
+                    <div style="display:flex;justify-content:space-between;font-size:10px;line-height:1.6;">
+                        <div style="text-align:left">
+                            <div><strong>Data:</strong> ${r.data}</div>
+                            <div><strong>Hora:</strong> ${r.hora}</div>
+                            <div><strong>Responsável:</strong> ${r.responsavel.toUpperCase()}</div>
+                        </div>
+                        <div style="text-align:right">
+                            <div><strong>Ticket:</strong> ${r.ticket}</div>
+                            <div><strong>Fornecedor:</strong> ${r.fornecedor}</div>
+                            <div><strong>Material:</strong> ${r.material}</div>
+                        </div>
                     </div>
-                </div>
-                <div style="text-align:center;border-top:1px dashed black;border-bottom:1px dashed black;padding:8px 0;margin:8px 0;font-size:12px">
-                    <div style="display:flex;justify-content:space-between">
-                        <span>Peso Bruto: ${r.bruto} kg</span>
-                        <span>Tara: ${r.tara} kg</span>
+                    <div style="margin-top:auto;border-top:1px dashed black;border-bottom:1px dashed black;padding:2mm 0;text-align:center;font-size:11px">
+                        <div style="display:flex;justify-content:space-between">
+                            <span>Peso Bruto: ${r.bruto} kg</span>
+                            <span>Tara: ${r.tara} kg</span>
+                        </div>
+                        <div style="font-size:18px;font-weight:bold;margin:2mm 0">Peso Líquido: ${r.liquido} kg</div>
                     </div>
-                    <div style="font-size:22px;font-weight:bold;margin-top:5px">Peso Líquido: ${r.liquido} kg</div>
-                </div>
-                <div style="margin-top:auto;text-align:center">
-                    <div style="font-family:'Libre Barcode 128',cursive;font-size:42px">*${r.ticket}*</div>
+                    <div style="margin-top:2mm;text-align:center">
+                        <div style="font-family:'Libre Barcode 128',cursive;font-size:38px">*${r.ticket}*</div>
+                    </div>
                 </div>`;
             document.getElementById('etiquetaModal').style.display='flex';
             
@@ -313,7 +341,7 @@
         
         let itemParaRemover = null; function pedirRemocao(id){ itemParaRemover=id; document.getElementById('confirmModal').classList.remove('hidden'); } function fecharConfirmacao(){ itemParaRemover=null; document.getElementById('confirmModal').classList.add('hidden'); } function confirmarExclusao(){ if(itemParaRemover!==null){ let d=getDb().filter(i=>i.id!==itemParaRemover);saveDb(d);if(d.length===0)unlockFields();showToast("Registo removido.","info");itemParaRemover=null;} document.getElementById('confirmModal').classList.add('hidden'); }
 
-        function renderHistory(){const b=document.querySelector('#historyTable tbody');b.innerHTML='';getDb().forEach(i=>{b.innerHTML+=`<tr><td>${i.material}</td><td>${i.local||'-'}</td><td style="text-align:right;color:var(--primary);font-weight:bold">${i.liquido} kg</td><td style="text-align:right">${i.tara} kg</td><td style="text-align:right">${i.bruto} kg</td><td style="text-align:center"><button class="btn-danger" style="padding:5px 8px" onclick="pedirRemocao(${i.id})"><i class="fa-solid fa-trash"></i></button></td></tr>`})}
+        function renderHistory(){const b=document.querySelector('#historyTable tbody');b.innerHTML='';getDb().forEach(i=>{b.innerHTML+=`<tr><td style="text-align:center">${i.ticket}</td><td>${i.material}</td><td>${i.local||'-'}</td><td style="text-align:right;color:var(--primary);font-weight:bold">${i.liquido} kg</td><td style="text-align:right">${i.tara} kg</td><td style="text-align:right">${i.bruto} kg</td><td style="text-align:center"><button class="btn-danger" style="padding:5px 8px" onclick="pedirRemocao(${i.id})"><i class="fa-solid fa-trash"></i></button></td></tr>`})}
         function fecharEtiqueta(){document.getElementById('etiquetaModal').style.display='none'} function imprimirEtiqueta(){document.body.classList.add('printing-label');window.print();document.body.classList.remove('printing-label')}
         
         function gerarRelatorio(){ 
