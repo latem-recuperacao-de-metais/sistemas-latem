@@ -1,32 +1,70 @@
-# 🏭 Central de Sistemas - Latem
+# Sistemas Latem - Controle de Pesagem e Identificação 🏭⚖️
 
-Suite de aplicações web desenvolvida para o controlo interno de **Pesagem** e **Identificação** de Matéria Prima, Tarugos e Lingotes da Latem. O sistema funciona inteiramente no navegador, com persistência de dados local, impressão padronizada e comunicação direta com balanças via porta serial.
+Sistema web offline-first desenvolvido para a **Latem Recuperação de Metais**. Este projeto consiste numa suite de aplicações para o chão de fábrica, focada no controlo rigoroso de entrada de matérias-primas e registo de produção de produtos acabados (Tarugos e Lingotes).
 
-## 🚀 Funcionalidades Principais
+O sistema opera localmente no navegador, garantindo alta velocidade, persistência de dados sem necessidade de internet e comunicação direta com hardware industrial (balanças e impressoras térmicas).
 
-- **Comunicação Serial Direta:** Conexão automática e leitura de dados em tempo real com balanças através da Web Serial API.
-- **Prevenção de Conflitos:** Bloqueio inteligente que impede a abertura do mesmo sistema em múltiplas abas simultaneamente (via BroadcastChannel).
-- **Impressão de Etiquetas (100x70mm):** Geração de comprovativos formatados estritamente para impressoras térmicas.
-- **Relatórios A4:** Geração de relatórios de produção e pesagem devidamente formatados para folhas A4 com totais calculados automaticamente.
-- **Autocomplete Customizado:** Seleção rápida e visualmente limpa de Ligas, Fornos, Fornecedores e Materiais.
-- **Interface Padronizada:** Notificações (Toasts), modais e navegação uniformes em todos os módulos.
-- **Armazenamento Local:** Salvaguarda do estado dos formulários e do histórico de registos via `localStorage`.
+## 📦 Módulos do Sistema
 
-## 📁 Estrutura do Projecto
+O projeto está dividido em 4 módulos principais operados de forma independente:
 
-A suite é composta por uma Central (Painel de Login/Navegação) e 4 módulos operacionais independentes:
+1. **Pesagem de Matéria-Prima:** Registo de entrada de fornecedores, leitura de peso bruto/tara e cálculo de líquido.
+2. **Identificação de Matéria-Prima:** Fracionamento de lotes e geração de etiquetas de rastreabilidade.
+3. **Pesagem de Tarugos e Lingotes:** Registo de produção, cálculo automático de volume/peso baseado em polegadas e comprimento (para tarugos).
+4. **Identificação de Tarugos e Lingotes:** Etiquetagem de produtos acabados e consolidação de lotes/fornadas.
 
-```text
-sistemas/
-├── index.html                        # Central de Sistemas (Login e Dashboard)
-├── photos/                           # Logótipos e imagens do sistema
-│   ├── logo-latem.png
-│   └── ...
-├── sistema_pesagem_tl/               # Módulo: Pesagem de Tarugos e Lingotes
-│   └── index.html
-├── sistema_pesagem_mp/               # Módulo: Pesagem de Matéria Prima
-│   └── index.html
-├── sistema_identificacao_tl/         # Módulo: Identificação de Tarugos e Lingotes
-│   └── index.html
-└── sistema_identificacao_mp/         # Módulo: Identificação de Matéria Prima
-    └── index.html
+## ✨ Principais Funcionalidades
+
+* **Integração com Hardware (Web Serial API):** Leitura automática do peso em tempo real comunicando diretamente com a balança ligada à porta serial (ex: COM4).
+* **Impressão Térmica Dinâmica:** Geração de etiquetas (100x70mm) com códigos de barras nativos (Libre Barcode 128) injetados diretamente para a impressora de chão de fábrica.
+* **Relatórios Inteligentes (PDF):** Conversão de tabelas e históricos de turno para formato A4 de forma nativa e sem interrupção das configurações da impressora de etiquetas.
+* **Offline-First & Local Storage:** Todo o histórico de pesagens, gestão de estado (rascunhos) e dados de formulário são salvos no navegador.
+* **Proteção de Integridade:** Prevenção automática contra a abertura de abas duplicadas do mesmo módulo para evitar conflitos de cache (via `BroadcastChannel`).
+
+## 🛠️ Tecnologias Utilizadas
+
+* **Frontend:** HTML5, Vanilla JavaScript, CSS3
+* **Armazenamento:** `localStorage` (Banco de Dados Local)
+* **Comunicação de Hardware:** Web Serial API
+* **Ícones e Tipografia:** FontAwesome 6, Google Fonts (Inter, Libre Barcode 128)
+
+## 🚀 Como Executar o Projeto
+
+Como o sistema foi desenhado para rodar num ambiente local sem necessidade de servidor back-end complexo:
+
+1. Clone este repositório:
+   ```bash
+   git clone [https://github.com/latem-recuperacao-de-metais/sistemas-latem.git](https://github.com/latem-recuperacao-de-metais/sistemas-latem.git)
+
+2. Abra o ficheiro index.html (Menu Principal) num navegador compatível com Web Serial (Google Chrome ou Microsoft Edge são recomendados).
+
+3. Para a Balança: No primeiro acesso ao módulo de pesagem, clique no status da balança e dê permissão de leitura à porta COM correspondente (ex: COM4). O navegador memorizará a permissão para reconexões automáticas.
+
+4. Para Impressão Automática (Opcional): É recomendado rodar o atalho do navegador com a flag --kiosk-printing para que as etiquetas sejam impressas instantaneamente na impressora padrão do Windows, sem exibir a caixa de diálogo.
+
+```
+/
+├── assets/
+│   ├── css/
+│   │   └── style.css       # Estilos globais e regras de impressão (@media print)
+│   └── js/
+│       └── app.js          # Lógica global, gerador de relatórios e variáveis do sistema
+├── photos/
+│   └── logo-latem.png      # Identidade visual corporativa
+├── sistema_identificacao_mp/
+│   └── index.html          # Módulo de Identificação de Matéria Prima
+├── sistema_identificacao_tl/
+│   └── index.html          # Módulo de Identificação de Tarugos e Lingotes
+├── sistema_pesagem_mp/
+│   └── index.html          # Módulo de Pesagem de Matéria Prima
+├── sistema_pesagem_tl/
+│   └── index.html          # Módulo de Pesagem de Tarugos e Lingotes
+└── index.html              # Menu Principal (Hub de navegação)
+```
+
+👨‍💻 Autor
+Diego Redekop
+Desenvolvedor do Sistema
+
+Latem Recuperação de Metais © 2026 - Todos os direitos reservados.
+
