@@ -8,110 +8,54 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Libre+Barcode+128&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
     <style>
-        /* CSS PADRONIZADO */
-        :root{--primary:#2563eb;--primary-dark:#1e40af;--secondary:#64748b;--bg-body:#f1f5f9;--bg-card:#ffffff;--text-main:#1e293b;--danger:#ef4444;--success:#22c55e;--warning:#f59e0b;--display-bg:#0f172a;--display-text:#38bdf8}
-        *{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif} body{background-color:var(--bg-body);color:var(--text-main);height:100vh;overflow:hidden;display:flex} .hidden{display:none !important}
-        
-        #toast-container{position:fixed;top:20px;right:20px;z-index:11000;display:flex;flex-direction:column;gap:10px} 
-        .toast{background:white;padding:15px 20px;border-radius:12px;box-shadow:0 10px 15px -3px rgba(0,0,0,0.1);display:flex;align-items:center;gap:12px;min-width:300px;animation:slideIn 0.3s forwards;border-left:5px solid var(--primary);font-size:0.9rem;font-weight:500} 
-        .toast.success{border-left-color:var(--success)} .toast.error{border-left-color:var(--danger)} .toast.warning{border-left-color:var(--warning)} .toast.info{border-left-color:var(--primary)} 
-        .toast i{font-size:1.2rem} .toast.success i{color:var(--success)} .toast.error i{color:var(--danger)} .toast.warning i{color:var(--warning)} .toast.info i{color:var(--primary)} 
-        @keyframes slideIn{from{transform:translateX(100%);opacity:0} to{transform:translateX(0);opacity:1}} @keyframes fadeOut{to{opacity:0;transform:translateY(-20px)}}
-        
-        .sidebar{width:80px;background-color:var(--display-bg);display:flex;flex-direction:column;align-items:center;padding-top:20px;transition:width 0.3s;z-index:10} .sidebar:hover{width:200px} 
-        .logo-area{width:60px;height:60px;border-radius:12px;display:flex;justify-content:center;align-items:center;margin-bottom:40px;overflow:hidden;background:white;padding:5px} .logo-area img{width:100%;height:100%;object-fit:contain} 
-        .nav-item{width:100%;display:flex;align-items:center;padding:15px 0;cursor:pointer;color:#94a3b8;transition:0.2s;text-decoration:none} .nav-item:hover,.nav-item.active{background-color:rgba(255,255,255,0.1);color:white;border-left:4px solid var(--primary)} 
-        .nav-icon{width:80px;text-align:center;font-size:1.2rem} .nav-text{white-space:nowrap;opacity:0;transition:opacity 0.2s} .sidebar:hover .nav-text{opacity:1}
-        
-        .main-content{flex:1;padding:20px;display:grid;grid-template-columns:350px 1fr;grid-template-rows:auto 1fr;gap:20px;height:100vh}
-        
-        header{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;background:var(--bg-card);padding:10px 25px;border-radius:12px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05)} 
-        .header-left{display:flex;align-items:center;gap:20px} .status-badge{display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:20px;font-size:0.85rem;font-weight:600;background:#fee2e2;color:var(--danger);cursor:pointer;transition:0.2s;border:1px solid transparent} .status-badge.connected{background:#dcfce7;color:var(--success)} .status-dot{width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 0 5px currentColor} 
-        .header-center{font-size:1.2rem;font-weight:600;display:flex;gap:10px;align-items:center;color:var(--text-main)} .clock-display{background:#f1f5f9;padding:5px 15px;border-radius:8px;font-family:'Courier New',monospace;color:var(--primary)} 
-        .user-info{display:flex;align-items:center;gap:10px;font-size:0.9rem} .user-avatar{width:35px;height:35px;background:var(--secondary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;text-transform:uppercase;font-weight:bold}
-        
-        .card{background:var(--bg-card);border-radius:16px;padding:20px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);display:flex;flex-direction:column;overflow:hidden} 
-        .card-title{font-size:1rem;font-weight:600;margin-bottom:15px;color:var(--secondary);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f1f5f9;padding-bottom:10px} 
-        .form-section{display:flex;flex-direction:column;gap:12px;overflow-y:auto; overflow-x:hidden;} 
-        .input-group{display:flex;flex-direction:column;gap:4px} label{font-size:0.75rem;font-weight:700;color:var(--secondary);text-transform:uppercase} 
-        input,select{padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.95rem;outline:none;background:#f8fafc;width:100%;transition:0.2s} input:focus,select:focus{border-color:var(--primary);background:white;box-shadow:0 0 0 3px rgba(37,99,235,0.1)} 
-        input:read-only,select:disabled,input:disabled{background-color:#e2e8f0;cursor:not-allowed;color:#64748b}
-        
-        .custom-autocomplete-wrapper { position: relative; width: 100%; }
-        .custom-autocomplete-list { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #e2e8f0; border-radius: 8px; max-height: 200px; overflow-y: auto; z-index: 1000; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); list-style: none; padding: 0; margin-top: 4px; }
-        .custom-autocomplete-list li { padding: 10px 15px; cursor: pointer; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; color: var(--text-main); }
-        .custom-autocomplete-list li:hover { background: #eff6ff; color: var(--primary); font-weight: 600; }
-        
-        .scale-section{display:flex;flex-direction:column;gap:15px;overflow-y:hidden} 
-        .display-container{background:var(--display-bg);color:var(--display-text);padding:20px 30px;border-radius:16px;text-align:right;position:relative;box-shadow:inset 0 0 30px rgba(0,0,0,0.6);display:flex;flex-direction:column;justify-content:center;height:150px;flex-shrink:0} 
-        .display-label{position:absolute;top:20px;left:20px;font-size:0.9rem;color:#64748b;font-weight:600;text-transform:uppercase} 
-        .weight-value{font-family:'Courier New',monospace;font-size:4.5rem;font-weight:700;text-shadow:0 0 15px rgba(56,189,248,0.4)} .display-offline .weight-value{color:#334155;text-shadow:none} .unit{font-size:1.5rem;color:#64748b;position:absolute;bottom:25px;right:30px}
-        .weight-controls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;margin-top:5px;flex-shrink:0} 
-        .weight-input-card{background:#f8fafc;padding:12px 15px;border-radius:12px;border:1px solid #e2e8f0;display:flex;flex-direction:column;justify-content:center} .weight-input-card label{margin-bottom:5px} 
-        .weight-input-card input{font-size:1.4rem;font-weight:700;border:none;background:transparent!important;border-bottom:2px solid #cbd5e1;width:100%;text-align:right;padding:5px 0;border-radius:0} .weight-input-card input[readonly]{color:var(--secondary);cursor:not-allowed;border-bottom-style:dashed} 
-        .highlight{background:#ecfdf5;border-color:#a7f3d0} .highlight input{color:var(--success);border-color:var(--success)}
-        
-        .actions{display:flex;gap:15px;flex-shrink:0} 
-        .btn{flex:1;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:0.2s;font-size:0.95rem;white-space:nowrap} 
-        .btn-primary{background:var(--primary);color:white} .btn-warning{background:var(--warning);color:white} .btn-secondary{background:white;border:1px solid #cbd5e1;color:var(--text-main)} .btn-danger{background:var(--danger);color:white}
-        
-        .history-section{flex:1;display:flex;flex-direction:column;overflow:hidden;margin-top:10px;background:white;border-radius:12px;padding:15px;border:1px solid #e2e8f0} 
-        .table-container{overflow-y:auto;flex:1} table{width:100%;border-collapse:collapse;font-size:0.85rem} th{text-align:left;padding:12px;background:#f8fafc;color:var(--secondary);font-weight:700;position:sticky;top:0;z-index:5} td{padding:10px 12px;border-bottom:1px solid #e2e8f0;vertical-align:middle}
-        
-        .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.9);display:flex;justify-content:center;align-items:center;z-index:1000}
-        
-        /* Modal de Visualização da Etiqueta (na tela) */
-        .etiqueta-modal { background:white; width: 380px; display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index:2000; flex-direction:column; box-shadow:0 0 50px rgba(0,0,0,0.5); font-family:'Courier New',monospace; border-radius:8px; overflow:hidden; }
+        .scale-section { display:flex; flex-direction:column; gap:15px; overflow-y:hidden; } 
+        .display-container { background:var(--display-bg); color:var(--display-text); padding:20px 30px; border-radius:16px; text-align:right; position:relative; box-shadow:inset 0 0 30px rgba(0,0,0,0.6); display:flex; flex-direction:column; justify-content:center; height:150px; flex-shrink:0; } 
+        .display-label { position:absolute; top:20px; left:20px; font-size:0.9rem; color:#64748b; font-weight:600; text-transform:uppercase; } 
+        .weight-value { font-family:'Courier New', monospace; font-size:4.5rem; font-weight:700; text-shadow:0 0 15px rgba(56,189,248,0.4); } 
+        .display-offline .weight-value { color:#334155; text-shadow:none; } 
+        .unit { font-size:1.5rem; color:#64748b; position:absolute; bottom:25px; right:30px; }
+        .weight-controls { display:grid; grid-template-columns:1fr 1fr 1fr; gap:15px; margin-top:5px; flex-shrink:0; } 
+        .weight-input-card { background:#f8fafc; padding:12px 15px; border-radius:12px; border:1px solid #e2e8f0; display:flex; flex-direction:column; justify-content:center; } 
+        .weight-input-card label { margin-bottom:5px; } 
+        .weight-input-card input { font-size:1.4rem; font-weight:700; border:none; background:transparent!important; border-bottom:2px solid #cbd5e1; width:100%; text-align:right; padding:5px 0; border-radius:0; } 
+        .weight-input-card input[readonly] { color:var(--secondary); cursor:not-allowed; border-bottom-style:dashed; } 
+        .highlight { background:#ecfdf5; border-color:#a7f3d0; } 
+        .highlight input { color:var(--success); border-color:var(--success); }
+        .actions { display:flex; gap:15px; flex-shrink:0; } 
+        .history-section { flex:1; display:flex; flex-direction:column; overflow:hidden; margin-top:10px; background:white; border-radius:12px; padding:15px; border:1px solid #e2e8f0; } 
+        .table-container { overflow-y:auto; flex:1; } 
+        table { width:100%; border-collapse:collapse; font-size:0.85rem; } 
+        th { text-align:left; padding:12px; background:#f8fafc; color:var(--secondary); font-weight:700; position:sticky; top:0; z-index:5; } 
+        td { padding:10px 12px; border-bottom:1px solid #e2e8f0; vertical-align:middle; }
+        .etiqueta-modal { background:white; width: 380px; display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index:2000; flex-direction:column; box-shadow:0 0 50px rgba(0,0,0,0.5); font-family:'Courier New', monospace; border-radius:8px; overflow:hidden; }
         .etiqueta-content { padding:15px; display:flex; flex-direction:column; background: white; }
-        
-        /* Modal de Visualização do Relatório (na tela) */
-        .relatorio-modal { background:white; width:800px; max-height:90vh; display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index:2000; flex-direction:column; box-shadow:0 0 50px rgba(0,0,0,0.5); border-radius:8px; overflow:hidden; } 
-        .relatorio-content { padding:40px; overflow-y:auto; flex:1; font-family:Arial,sans-serif; color:black; } 
-        .relatorio-header { text-align:center; margin-bottom:20px; border-bottom:2px solid #000; padding-bottom:15px; } 
-        .relatorio-table { width:100%; border-collapse:collapse; margin-top:20px; font-size:12px; } .relatorio-table th { background:#eee; font-weight:bold; border-bottom:2px solid #000; padding:8px; text-align:left; } .relatorio-table td { padding:8px; border-bottom:1px solid #f0f0f0; }
-
-        /* ==========================================================================
-           REGRAS ESTRITAS DE IMPRESSÃO (ETIQUETA 100x70mm E RELATÓRIO A4)
-           ========================================================================== */
         @media print {
-            /* Regras Específicas para Etiqueta Térmica */
             body.printing-label { margin: 0 !important; padding: 0 !important; background: white !important; }
-            .printing-label @page { size: 100mm 70mm; margin: 0; }
+            .printing-label @page { size: 100mm 70mm !important; margin: 0 !important; }
             .printing-label * { visibility: hidden; }
             .printing-label #etiquetaModal, .printing-label #etiquetaModal * { visibility: visible; }
-            .printing-label #etiquetaModal {
-                position: absolute; left: 0; top: 0; width: 100mm; height: 70mm;
-                margin: 0; padding: 0; border: none; box-shadow: none; transform: none; border-radius: 0;
-                display: block; background: white;
-            }
-            .printing-label #etiquetaArea {
-                width: 100mm; height: 70mm; padding: 4mm; box-sizing: border-box;
-                display: flex; flex-direction: column; justify-content: space-between;
-            }
+            .printing-label #etiquetaModal { position: absolute !important; left: 0 !important; top: 0 !important; width: 100mm !important; height: 70mm !important; margin: 0 !important; padding: 0 !important; border: none !important; box-shadow: none !important; transform: none !important; border-radius: 0 !important; display: block !important; background: white !important; }
+            .printing-label #etiquetaArea { width: 100mm !important; height: 70mm !important; padding: 4mm !important; box-sizing: border-box !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; }
             .printing-label .btn-print-area { display: none !important; }
-
-            /* Regras Específicas para Relatório A4 */
-            body.printing-report { margin: 0 !important; padding: 0 !important; background: white !important; }
-            .printing-report @page { size: A4 portrait; margin: 10mm; }
-            .printing-report * { visibility: hidden; }
-            .printing-report #relatorioModal, .printing-report #relatorioModal * { visibility: visible; }
-            .printing-report #relatorioModal {
-                position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0;
-                border: none; box-shadow: none; transform: none; max-height: none; border-radius: 0;
-                display: block; background: transparent;
-            }
-            .printing-report .relatorio-content { width: 190mm; margin: 0 auto; padding: 0; }
-            .printing-report .relatorio-footer { display: none !important; }
-            
             header, .sidebar, .actions, .form-section, .weight-controls { display: none !important; }
         }
     </style>
 </head>
 <body>
-    <div id="duplicateTabModal" class="modal-overlay hidden" style="z-index:99999;background:var(--display-bg)"><div style="background:white;padding:40px;border-radius:20px;text-align:center"><i class="fa-solid fa-triangle-exclamation" style="font-size:3.5rem;color:var(--danger);margin-bottom:20px"></i><h2 style="margin-bottom:10px;color:var(--text-main)">Sistema já aberto!</h2><p style="color:var(--secondary);margin-bottom:25px">Volte para a aba que já está aberta para evitar conflitos.</p></div></div>
-    <div id="confirmModal" class="modal-overlay hidden" style="z-index:99999"><div style="background:white;padding:30px;border-radius:16px;text-align:center;max-width:350px"><i class="fa-solid fa-circle-question" style="font-size:3rem;color:var(--warning);margin-bottom:15px"></i><h3 style="margin-bottom:10px;color:var(--text-main)">Confirmar Exclusão</h3><p style="color:var(--secondary);margin-bottom:20px">Deseja realmente excluir este registo?</p><div style="display:flex;gap:10px;justify-content:center"><button class="btn btn-secondary" onclick="fecharConfirmacao()">Cancelar</button><button class="btn btn-danger" onclick="confirmarExclusao()">Excluir</button></div></div></div>
     <div id="toast-container"></div>
+    <div id="confirmModal" class="modal-overlay hidden" style="z-index:99999">
+        <div style="background:white;padding:30px;border-radius:16px;text-align:center;max-width:350px">
+            <i class="fa-solid fa-circle-question" style="font-size:3rem;color:var(--warning);margin-bottom:15px"></i>
+            <h3 style="margin-bottom:10px;color:var(--text-main)">Confirmar Exclusão</h3>
+            <p style="color:var(--secondary);margin-bottom:20px">Deseja realmente excluir este registo?</p>
+            <div style="display:flex;gap:10px;justify-content:center">
+                <button class="btn btn-secondary" onclick="fecharConfirmacao()">Cancelar</button>
+                <button class="btn btn-danger" onclick="confirmarExclusao()">Excluir</button>
+            </div>
+        </div>
+    </div>
     
     <div id="etiquetaModal" class="etiqueta-modal">
         <div id="etiquetaArea" class="etiqueta-content" style="height:265px;"></div>
@@ -121,75 +65,81 @@
         </div>
     </div>
     
-    <div id="relatorioModal" class="relatorio-modal">
-        <div id="relatorioConteudo" class="relatorio-content"></div>
-        <div class="relatorio-footer" style="padding:15px;border-top:1px solid #eee;display:flex;gap:10px;background:white;">
-            <button class="btn btn-primary" onclick="imprimirRelatorioReal()" style="flex:1"><i class="fa-solid fa-print"></i> Imprimir Relatório</button>
-            <button class="btn btn-secondary" onclick="fecharRelatorio()" style="flex:1">Fechar</button>
-        </div>
-    </div>
-    
     <nav class="sidebar">
-        <div class="logo-area"><img src="../photos/logo-latem.png" alt="Logo"></div>
+        <div class="logo-area"><img src="../photos/logo-latem.png" alt="Logo" onerror="this.style.display='none'"></div>
         <a href="#" class="nav-item active"><div class="nav-icon"><i class="fa-solid fa-scale-balanced"></i></div><span class="nav-text">Pesagem</span></a>
-        <div style="margin-top:auto;width:100%;margin-bottom:20px"><a href="#" class="nav-item" onclick="logout(); return false;"><div class="nav-icon"><i class="fa-solid fa-right-from-bracket"></i></div><span class="nav-text">Sair</span></a></div>
+        <div style="margin-top:auto;width:100%;margin-bottom:20px">
+            <a href="#" class="nav-item" onclick="logout(); return false;">
+                <div class="nav-icon"><i class="fa-solid fa-right-from-bracket"></i></div><span class="nav-text">Sair</span>
+            </a>
+        </div>
     </nav>
+
     <main class="main-content">
         <header>
-            <div class="header-left"><div id="scaleStatus" class="status-badge" onclick="conectarBalanca()"><div class="status-dot"></div><span id="statusText">Desconectada (Clique conectar)</span></div></div>
+            <div class="header-left">
+                <div id="scaleStatus" class="status-badge" style="display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:20px;font-size:0.85rem;font-weight:600;background:#fee2e2;color:var(--danger);cursor:pointer;" onclick="conectarBalanca()">
+                    <div class="status-dot" style="width:8px;height:8px;border-radius:50%;background:currentColor;"></div>
+                    <span id="statusText">Desconectada (Clique conectar)</span>
+                </div>
+            </div>
             <div class="header-center">
                 <i class="fa-regular fa-clock" style="color:var(--primary)"></i>
                 <div class="clock-display" id="clock">00:00:00</div>
                 <div style="font-size:0.9rem;color:var(--secondary);font-weight:600;" id="date">01/01/2024</div>
             </div>
-            <div class="user-info"><span id="userNameDisplay">---</span><div class="user-avatar" id="userAvatarIcon"><i class="fa-solid fa-user"></i></div></div>
+            <div class="user-info">
+                <span id="userNameDisplay">---</span>
+                <div class="user-avatar" id="userAvatarIcon"><i class="fa-solid fa-user"></i></div>
+            </div>
         </header>
         
         <div class="card form-section">
             <div class="card-title"><span><i class="fa-solid fa-file-invoice"></i> Dados da Matéria Prima</span></div>
-            
             <div class="input-group"><label>Nº do Ticket</label><input type="text" id="ticket" placeholder="Insira o Ticket da Balança"></div>
             <div class="input-group"><label>Nota Fiscal</label><input type="text" id="nfe" placeholder="000.000.000"></div>
-            
-            <div class="input-group">
-                <label>Fornecedor</label>
-                <input type="text" id="fornecedor" placeholder="Selecione o Fornecedor">
+            <div class="input-group"><label>Fornecedor</label><input type="text" id="fornecedor" placeholder="Selecione o Fornecedor"></div>
+            <div class="input-group"><label>Material</label><input type="text" id="material" placeholder="Selecione o Material"></div>
+            <div class="input-group"><label>Localização</label><input type="text" id="localizacao" placeholder="Selecione a Localização"></div>
+            <div class="input-group"><label>Unidade</label><input type="text" id="unidade" placeholder="Selecione a Unidade"></div>
+            <div style="margin-top:auto;padding-top:10px;text-align:center;">
+                <button class="btn btn-secondary" onclick="limparTudo()" style="width:100%;">
+                    <i class="fa-solid fa-eraser"></i> Limpar Tudo
+                </button>
             </div>
-
-            <div class="input-group">
-                <label>Material</label>
-                <input type="text" id="material" placeholder="Selecione o Material">
-            </div>
-
-            <div class="input-group">
-                <label>Localização</label>
-                <input type="text" id="localizacao" placeholder="Selecione a Localização">
-            </div>
-            
-            <div class="input-group">
-                <label>Unidade</label>
-                <input type="text" id="unidade" placeholder="Selecione a Unidade">
-            </div>
-            
-            <div style="margin-top:auto;padding-top:10px;text-align:center;"><button class="btn btn-secondary" onclick="limparTudo()" style="width:100%;"><i class="fa-solid fa-eraser"></i> Limpar Tudo</button></div>
         </div>
 
         <div class="scale-section">
-            <div id="displayContainer" class="display-container display-offline"><div class="display-label">PESO LÍQUIDO (kg)</div><div class="weight-value" id="displayLiquido">----</div><div class="unit">KG</div></div>
+            <div id="displayContainer" class="display-container display-offline">
+                <div class="display-label">PESO LÍQUIDO (kg)</div>
+                <div class="weight-value" id="displayLiquido">----</div>
+                <div class="unit">KG</div>
+            </div>
             <div class="weight-controls">
-                <div class="weight-input-card"><label>Peso Bruto (kg)</label><input type="number" id="pesoBruto" value="0" readonly oninput="calcularPesos()"></div>
-                <div class="weight-input-card" style="border-left:4px solid var(--primary);"><label>Tara (kg)</label><input type="number" id="pesoTara" placeholder="0" oninput="calcularPesos()"></div>
-                <div class="weight-input-card highlight"><label>Peso Líquido (kg)</label><input type="number" id="pesoLiquido" value="0" readonly></div>
+                <div class="weight-input-card">
+                    <label>Peso Bruto (kg)</label>
+                    <input type="number" id="pesoBruto" value="0" readonly oninput="calcularPesos()">
+                </div>
+                <div class="weight-input-card" style="border-left:4px solid var(--primary);">
+                    <label>Tara (kg)</label>
+                    <input type="number" id="pesoTara" placeholder="0" oninput="calcularPesos()">
+                </div>
+                <div class="weight-input-card highlight">
+                    <label>Peso Líquido (kg)</label>
+                    <input type="number" id="pesoLiquido" value="0" readonly>
+                </div>
             </div>
             <div class="actions">
                 <button class="btn btn-primary" onclick="realizarPesagem()"><i class="fa-solid fa-scale-balanced"></i> Pesar</button>
                 <button class="btn btn-warning" onclick="gerarRelatorio()"><i class="fa-solid fa-print"></i> Relatório</button>
             </div>
             <div class="history-section">
-                <div class="card-title" style="margin-bottom:10px; display:flex; justify-content:space-between;"><span><i class="fa-solid fa-list-check"></i> Registros</span></div>
+                <div class="card-title" style="margin-bottom:10px; display:flex; justify-content:space-between;">
+                    <span><i class="fa-solid fa-list-check"></i> Registros</span>
+                </div>
                 <div class="table-container">
                     <table id="historyTable">
-                        <thead><tr><th>Ticket</th><th>Material</th><th>Local</th><th style="text-align:right">Peso Líquido</th><th style="text-align:right">Tara</th><th style="text-align:right">Peso Bruto</th><th style="text-align:center">Ações</th></tr></thead>
+                        <thead><tr><th>Material</th><th>Localização</th><th>Unidade</th><th style="text-align:right">Peso Líquido</th><th style="text-align:right">Tara</th><th style="text-align:right">Peso Bruto</th><th style="text-align:center">Ações</th></tr></thead>
                         <tbody></tbody>
                     </table>
                 </div>
@@ -197,214 +147,281 @@
         </div>
     </main>
 
+    <script src="../assets/js/app.js"></script>
+
     <script>
-        const globalTabChannel=new BroadcastChannel('latem_global_lock'); globalTabChannel.onmessage=(e)=>{if(e.data==='TEM_ALGUEM_AI')globalTabChannel.postMessage('EU_JA_ESTOU_AQUI');else if(e.data==='EU_JA_ESTOU_AQUI')document.getElementById('duplicateTabModal').classList.remove('hidden');}; setTimeout(()=>globalTabChannel.postMessage('TEM_ALGUEM_AI'),100);
-        
-        function updateClock(){
-            const n=new Date();
-            document.getElementById('clock').innerText=n.toLocaleTimeString('pt-BR');
-            document.getElementById('date').innerText=n.toLocaleDateString('pt-BR');
-        } 
-        setInterval(updateClock,1000); updateClock();
+        function saveFormState() {
+            const state = {
+                ticket: document.getElementById('ticket').value,
+                nfe: document.getElementById('nfe').value,
+                fornecedor: document.getElementById('fornecedor').value,
+                material: document.getElementById('material').value,
+                localizacao: document.getElementById('localizacao').value,
+                unidade: document.getElementById('unidade').value,
+                pesoTara: document.getElementById('pesoTara').value
+            };
+            localStorage.setItem('latem_pesagem_mp_state', JSON.stringify(state));
+        }
 
-        function showToast(msg,type='success'){const c=document.getElementById('toast-container'),t=document.createElement('div');t.className=`toast ${type}`;let icon=type==='error'?'circle-exclamation':(type==='warning'?'triangle-exclamation':(type==='info'?'circle-info':'check-circle'));t.innerHTML=`<i class="fa-solid fa-${icon}"></i> <span>${msg}</span>`; c.appendChild(t);setTimeout(()=>{t.style.animation='fadeOut 0.5s ease-out forwards';setTimeout(()=>t.remove(),500)},3000);}
-
-        function setupAutocomplete(inputId, optionsArray) {
-            const input = document.getElementById(inputId);
-            input.setAttribute('autocomplete', 'off');
-            const wrapper = document.createElement('div');
-            wrapper.className = 'custom-autocomplete-wrapper';
-            input.parentNode.insertBefore(wrapper, input);
-            wrapper.appendChild(input);
-
-            const list = document.createElement('ul');
-            list.className = 'custom-autocomplete-list hidden';
-            wrapper.appendChild(list);
-
-            function showOptions(filterStr) {
-                if(input.disabled || input.readOnly) return;
-                list.innerHTML = '';
-                const filtered = filterStr ? optionsArray.filter(o => o.toLowerCase().includes(filterStr.toLowerCase())) : optionsArray;
-                if (filtered.length === 0) { list.classList.add('hidden'); return; }
-                filtered.forEach(o => {
-                    const li = document.createElement('li');
-                    li.textContent = o;
-                    li.onmousedown = (e) => { 
-                        e.preventDefault(); 
-                        input.value = o; 
-                        list.classList.add('hidden'); 
-                        input.dispatchEvent(new Event('input')); 
-                    };
-                    list.appendChild(li);
+        function loadFormState() {
+            const state = JSON.parse(localStorage.getItem('latem_pesagem_mp_state'));
+            if(state) {
+                ['ticket', 'nfe', 'fornecedor', 'material', 'localizacao', 'unidade', 'pesoTara'].forEach(id => {
+                    if(document.getElementById(id)) document.getElementById(id).value = state[id] || '';
                 });
-                list.classList.remove('hidden');
+                calcularPesos();
             }
-
-            input.addEventListener('focus', () => showOptions(input.value));
-            input.addEventListener('input', () => showOptions(input.value));
-            input.addEventListener('blur', () => setTimeout(()=> list.classList.add('hidden'), 150));
         }
 
-        // PREENCHA COM SEUS FORNECEDORES E MATERIAIS
-        const listaFornecedores = ["FORNECEDOR 1", "FORNECEDOR 2"];
-        const listaMateriais = ["MATERIAL A", "MATERIAL B"]; 
-        const listaLocais = ["Patio", "AC", "RB", "A01", "A02", "A03", "Casinha Borra", "Sem Localização"];
-        const listaUnidades = ["Bag", "Pallet", "Caçamba", "Granel", "Caixa", "Fardo", "Gaiola", "Sacaria", "Solta", "Tambor"];
+        document.querySelector('.form-section').addEventListener('input', saveFormState);
+        document.querySelector('.weight-controls').addEventListener('input', saveFormState);
+
+        let scaleConnected = false, serialPort = null, serialReader = null, keepReading = false;
         
-        setupAutocomplete('fornecedor', listaFornecedores);
-        setupAutocomplete('material', listaMateriais);
-        setupAutocomplete('localizacao', listaLocais);
-        setupAutocomplete('unidade', listaUnidades);
+        window.addEventListener('beforeunload', async() => {
+            if(scaleConnected) {
+                keepReading = false;
+                if(serialReader) await serialReader.cancel().catch(e=>console.log(e));
+                if(serialPort) await serialPort.close().catch(e=>console.log(e));
+                localStorage.removeItem('latem_scale_connected');
+            }
+        });
 
-        let currentUser = 'Operador';
-        function carregarOperador() { currentUser=localStorage.getItem('latem_user')||'Operador'; document.getElementById('userNameDisplay').innerText=currentUser; document.getElementById('userAvatarIcon').innerText=currentUser.charAt(0).toUpperCase(); }
-        function logout(){showToast("Voltando ao menu principal...","info"); if(scaleConnected){try{keepReading=false;if(serialReader)serialReader.cancel().catch(e=>console.log(e));if(serialPort)serialPort.close().catch(e=>console.log(e));localStorage.removeItem('latem_scale_connected');}catch(e){}} setTimeout(()=>{window.location.href='../index.html'},1000)}
-
-        let scaleConnected=false,serialPort=null,serialReader=null,keepReading=false;
-        window.addEventListener('beforeunload',async()=>{if(scaleConnected){keepReading=false;if(serialReader)await serialReader.cancel();if(serialPort)await serialPort.close();localStorage.removeItem('latem_scale_connected')}});
-
-        async function conectarBalanca(){
-            if(scaleConnected){keepReading=false;if(serialReader)await serialReader.cancel();if(serialPort)await serialPort.close();scaleConnected=false;localStorage.removeItem('latem_scale_connected');updateStatus(false);showToast('Balança desconectada.','info');return;}
-            if(!('serial' in navigator))return showToast('O seu navegador não suporta conexão com a balança.','error');
-            try{serialPort=await navigator.serial.requestPort();await serialPort.open({baudRate:9600});scaleConnected=true;keepReading=true;localStorage.setItem('latem_scale_connected','true');updateStatus(true);showToast('Balança conectada com sucesso!');readSerialLoop();} catch(err){showToast('Falha ao conectar. Confirme que escolheu a porta correta.','error');scaleConnected=false;updateStatus(false);}
+        async function conectarBalanca() {
+            if(scaleConnected) {
+                keepReading=false; if(serialReader) await serialReader.cancel().catch(e=>console.log(e)); if(serialPort) await serialPort.close().catch(e=>console.log(e));
+                scaleConnected=false; localStorage.removeItem('latem_scale_connected'); updateStatus(false); showToast('Balança desconectada.','info'); return;
+            }
+            if(!('serial' in navigator)) return showToast('O seu navegador não suporta conexão com a balança.','error');
+            try {
+                serialPort = await navigator.serial.requestPort();
+                await serialPort.open({baudRate:9600});
+                scaleConnected=true; keepReading=true; localStorage.setItem('latem_scale_connected','true');
+                updateStatus(true); showToast('Balança conectada com sucesso!', 'success');
+                readSerialLoop();
+            } catch(err) {
+                showToast('Falha ao conectar. Confirme a porta.','error'); scaleConnected=false; updateStatus(false);
+            }
         }
-        function updateStatus(c){ const b=document.getElementById('scaleStatus'),t=document.getElementById('statusText'),d=document.getElementById('displayContainer'),i=document.getElementById('pesoBruto'); if(c){b.classList.add('connected');t.innerText="Conectada";d.classList.remove('display-offline');i.readOnly=true}else{b.classList.remove('connected');t.innerText="Desconectada (Clique conectar)";d.classList.add('display-offline');document.getElementById('displayLiquido').innerText="----";i.value=0} }
-        async function readSerialLoop(){ const td=new TextDecoderStream();serialPort.readable.pipeTo(td.writable);const r=td.readable.getReader();serialReader=r;let buf=''; try{while(keepReading){const{value:v,done:d}=await r.read();if(d)break;if(v){buf+=v;if(buf.includes('\r')||buf.includes('\n')){const l=buf.split(/[\r\n]+/);const ld=l.filter(x=>x.trim().length>0).pop();if(ld){const m=ld.match(/(\d+(\.\d+)?)/);if(m&&m[0]){document.getElementById('pesoBruto').value=parseFloat(m[0]);calcularPesos()}}buf=''}}}}catch(e){showToast('Erro de leitura.','error')}finally{r.releaseLock()} }
-        async function autoConnectScale(){
+
+        function updateStatus(c) { 
+            const b = document.getElementById('scaleStatus'), t = document.getElementById('statusText'), d = document.getElementById('displayContainer'), i = document.getElementById('pesoBruto'); 
+            if(c) {
+                b.style.background = '#dcfce7'; b.style.color = 'var(--success)'; t.innerText = "Conectada"; d.classList.remove('display-offline'); i.readOnly = true;
+            } else {
+                b.style.background = '#fee2e2'; b.style.color = 'var(--danger)'; t.innerText = "Desconectada (Clique conectar)"; d.classList.add('display-offline'); document.getElementById('displayLiquido').innerText = "----"; i.value = 0; i.readOnly = false;
+            } 
+        }
+
+        async function readSerialLoop() { 
+            const td = new TextDecoderStream(); serialPort.readable.pipeTo(td.writable); const r = td.readable.getReader(); serialReader = r; let buf = ''; 
+            try {
+                while(keepReading) {
+                    const {value, done} = await r.read(); if(done) break;
+                    if(value) {
+                        buf += value;
+                        if(buf.includes('\r') || buf.includes('\n')) {
+                            const lines = buf.split(/[\r\n]+/); const lastData = lines.filter(x => x.trim().length > 0).pop();
+                            if(lastData) {
+                                const match = lastData.match(/(\d+(\.\d+)?)/);
+                                if(match && match[0]) {
+                                    document.getElementById('pesoBruto').value = parseFloat(match[0]);
+                                    calcularPesos();
+                                }
+                            }
+                            buf = '';
+                        }
+                    }
+                }
+            } catch(e) { 
+                showToast('Erro de hardware. Balança desconectada.', 'error');
+                updateStatus(false);
+                scaleConnected = false;
+            } finally { r.releaseLock(); } 
+        }
+
+        async function autoConnectScale() {
             if(!('serial' in navigator)) return;
-            try{
-                const p=await navigator.serial.getPorts();
-                if(p.length>0){
-                    serialPort=p[0];await serialPort.open({baudRate:9600});scaleConnected=true;keepReading=true;updateStatus(true);showToast('Balança auto-conectada!');readSerialLoop()
-                } else if(localStorage.getItem('latem_scale_connected')==='true'){
+            try {
+                const p = await navigator.serial.getPorts();
+                if(p.length > 0) {
+                    serialPort = p[0]; await serialPort.open({baudRate:9600}); scaleConnected=true; keepReading=true; updateStatus(true); showToast('Balança auto-conectada!', 'success'); readSerialLoop();
+                } else if(localStorage.getItem('latem_scale_connected') === 'true') {
                     conectarBalanca();
                 }
-            }catch(e){}
+            } catch(e){}
         }
 
-        function calcularPesos(){const b=parseFloat(document.getElementById('pesoBruto').value)||0,t=parseFloat(document.getElementById('pesoTara').value)||0,l=b-t;document.getElementById('pesoLiquido').value=l;const d=document.getElementById('displayLiquido');d.innerText=l;d.style.color=l<0?'var(--danger)':'';}
-        function getDb(){return JSON.parse(localStorage.getItem('latem_db_v2'))||[]} function saveDb(d){localStorage.setItem('latem_db_v2',JSON.stringify(d));renderHistory()}
-        function lockFields(){['ticket','nfe','fornecedor'].forEach(id=>document.getElementById(id).readOnly=true)} function unlockFields(){['ticket','nfe','fornecedor'].forEach(id=>document.getElementById(id).readOnly=false)}
+        let currentUser = 'Operador';
+        function carregarOperador() { 
+            currentUser = localStorage.getItem('latem_user') || 'Operador'; 
+            document.getElementById('userNameDisplay').innerText = currentUser; 
+            document.getElementById('userAvatarIcon').innerText = currentUser.charAt(0).toUpperCase(); 
+        }
+        
+        function logout() { 
+            showToast("Voltando ao menu principal...","info"); 
+            if(scaleConnected) { try{keepReading=false;if(serialReader)serialReader.cancel().catch(e=>console.log(e));if(serialPort)serialPort.close().catch(e=>console.log(e));localStorage.removeItem('latem_scale_connected');}catch(e){} } 
+            setTimeout(() => { window.location.href = '../index.html' }, 1000);
+        }
 
-        function realizarPesagem(){
-            const t=document.getElementById('ticket').value,m=document.getElementById('material').value,f=document.getElementById('fornecedor').value,b=parseFloat(document.getElementById('pesoBruto').value)||0,ta=document.getElementById('pesoTara').value||0,l=document.getElementById('pesoLiquido').value;
-            if(!t||!f||!m)return showToast("Preencha Ticket, Fornecedor e Material.",'warning'); if(b<=0)return showToast("Peso inválido.",'warning');
-            const r={id:Date.now(),data:new Date().toLocaleDateString('pt-BR'),hora:new Date().toLocaleTimeString('pt-BR'),ticket:t,nfe:document.getElementById('nfe').value,fornecedor:f,local:document.getElementById('localizacao').value,material:m,unidade:document.getElementById('unidade').value,bruto:b,tara:ta,liquido:l,responsavel:currentUser};
-            const db=getDb();db.unshift(r);saveDb(db);lockFields();showToast("Pesagem registada com sucesso!");
+        function calcularPesos() {
+            const b = parseFloat(document.getElementById('pesoBruto').value) || 0;
+            const t = parseFloat(document.getElementById('pesoTara').value) || 0;
+            const l = b - t;
+            document.getElementById('pesoLiquido').value = l;
+            const d = document.getElementById('displayLiquido');
+            d.innerText = l;
+            d.style.color = l < 0 ? 'var(--danger)' : '';
+        }
+
+        function getDb() { return JSON.parse(localStorage.getItem('latem_db_v2')) || []; } 
+        function saveDb(d) { localStorage.setItem('latem_db_v2', JSON.stringify(d)); renderHistory(); }
+        function lockFields() { ['ticket','nfe','fornecedor'].forEach(id => document.getElementById(id).readOnly = true); } 
+        function unlockFields() { ['ticket','nfe','fornecedor'].forEach(id => document.getElementById(id).readOnly = false); }
+
+        function realizarPesagem() {
+            const t = document.getElementById('ticket').value, m = document.getElementById('material').value, f = document.getElementById('fornecedor').value, loc = document.getElementById('localizacao').value, un = document.getElementById('unidade').value, b = parseFloat(document.getElementById('pesoBruto').value) || 0, ta = document.getElementById('pesoTara').value || 0, l = document.getElementById('pesoLiquido').value;
+            if(!t || !f || !m || !loc || !un) return showToast("Preencha todos os campos obrigatórios.", 'warning'); 
+            if(b <= 0) return showToast("Peso inválido.", 'warning');
             
-            document.getElementById('etiquetaArea').innerHTML=`
+            const r = {
+                id: Date.now(), data: new Date().toLocaleDateString('pt-BR'), hora: new Date().toLocaleTimeString('pt-BR'),
+                ticket: t, nfe: document.getElementById('nfe').value, fornecedor: f, local: loc,
+                material: m, unidade: un, bruto: b, tara: ta, liquido: l, responsavel: currentUser
+            };
+            
+            const db = getDb(); db.unshift(r); saveDb(db); lockFields(); showToast("Pesagem registrada com sucesso!", "success");
+            
+            document.getElementById('etiquetaArea').innerHTML = `
                 <div style="height:100%; display:flex; flex-direction:column; justify-content:space-between; box-sizing:border-box;">
                     <div style="text-align:center;border-bottom:2px solid black;padding-bottom:2mm;margin-bottom:2mm">
-                        <img src="../photos/logo-latem.png" style="max-height:10mm;margin-bottom:1mm">
+                        <img src="../photos/logo-latem.png" style="max-height:10mm;margin-bottom:1mm" onerror="this.style.display='none'">
                         <div style="font-size:12px;font-weight:bold;letter-spacing:1px">COMPROVANTE DE PESAGEM</div>
                     </div>
-                    <div style="display:flex;justify-content:space-between;font-size:10px;line-height:1.6;">
+                    <div style="display:flex;justify-content:space-between;font-size:11px;line-height:1.6;margin-bottom:5px;">
                         <div style="text-align:left">
-                            <div><strong>Data:</strong> ${r.data}</div>
-                            <div><strong>Hora:</strong> ${r.hora}</div>
-                            <div><strong>Responsável:</strong> ${r.responsavel.toUpperCase()}</div>
+                            <div><strong>Ticket:</strong> ${r.ticket}</div>
+                            <div style="margin-top:2px"><strong>Nota Fiscal:</strong> ${r.nfe || '---'}</div>
                         </div>
                         <div style="text-align:right">
-                            <div><strong>Ticket:</strong> ${r.ticket}</div>
                             <div><strong>Fornecedor:</strong> ${r.fornecedor}</div>
-                            <div><strong>Material:</strong> ${r.material}</div>
+                            <div style="margin-top:2px"><strong>Material:</strong> ${r.material}</div>
                         </div>
                     </div>
-                    <div style="margin-top:auto;border-top:1px dashed black;border-bottom:1px dashed black;padding:2mm 0;text-align:center;font-size:11px">
+                    <div style="text-align:center;border-top:1px dashed black;border-bottom:1px dashed black;padding:5px 0;margin:5px 0;font-size:11px">
                         <div style="display:flex;justify-content:space-between">
                             <span>Peso Bruto: ${r.bruto} kg</span>
                             <span>Tara: ${r.tara} kg</span>
                         </div>
-                        <div style="font-size:18px;font-weight:bold;margin:2mm 0">Peso Líquido: ${r.liquido} kg</div>
+                        <div style="font-size:18px;font-weight:bold;margin-top:2px">Peso Líquido: ${r.liquido} kg</div>
                     </div>
-                    <div style="margin-top:2mm;text-align:center">
-                        <div style="font-family:'Libre Barcode 128',cursive;font-size:38px">*${r.ticket}*</div>
+                    <div style="margin-top:auto;text-align:center">
+                        <div style="font-family:'Libre Barcode 128',cursive;font-size:36px">*${r.ticket}*</div>
+                    </div>
+                    <div style="margin-top:5px;border-top:1px solid black;padding-top:3px;text-align:center;font-size:9px;font-weight:bold;">
+                        DATA: ${r.data} | HORA: ${r.hora} | RESPONSÁVEL: ${r.responsavel.toUpperCase()}
                     </div>
                 </div>`;
-            document.getElementById('etiquetaModal').style.display='flex';
+            document.getElementById('etiquetaModal').style.display = 'flex';
             
-            ['localizacao','material','unidade'].forEach(id=>document.getElementById(id).value=''); if(!scaleConnected)document.getElementById('pesoBruto').value=''; document.getElementById('pesoTara').value=''; calcularPesos();
+            ['localizacao','material','unidade'].forEach(id => document.getElementById(id).value = ''); 
+            if(!scaleConnected) document.getElementById('pesoBruto').value = ''; 
+            document.getElementById('pesoTara').value = ''; 
+            calcularPesos();
+            saveFormState();
         }
 
-        function limparTudo(){
-            const a=getDb().length>0, b=document.getElementById('pesoBruto').value, l=document.getElementById('localizacao').value, m=document.getElementById('material').value, u=document.getElementById('unidade').value, t=document.getElementById('pesoTara').value;
-            if(a){
-                if(!l&&!m&&!u&&!t)return showToast("Os campos já estão vazios.",'warning');
-                ['localizacao','material','unidade','pesoTara'].forEach(id=>document.getElementById(id).value=''); calcularPesos(); showToast("Campos parciais limpos.",'success');
-            } else{
-                const ti=document.getElementById('ticket').value, n=document.getElementById('nfe').value, f=document.getElementById('fornecedor').value;
-                if(!ti&&!n&&!f&&!l&&!m&&!u&&!t)return showToast("O formulário já está vazio.",'warning');
-                ['ticket','nfe','fornecedor','localizacao','material','unidade','pesoTara'].forEach(id=>document.getElementById(id).value='');
-                if(!scaleConnected)document.getElementById('pesoBruto').value=''; unlockFields(); calcularPesos(); showToast("Tudo limpo.",'success');
+        function limparTudo() {
+            const a = getDb().length > 0, b = document.getElementById('pesoBruto').value, l = document.getElementById('localizacao').value, m = document.getElementById('material').value, u = document.getElementById('unidade').value, t = document.getElementById('pesoTara').value;
+            if(a) {
+                if(!l && !m && !u && !t && !b) return showToast("Os campos parciais já estão vazios.",'warning');
+                ['localizacao','material','unidade','pesoTara'].forEach(id => document.getElementById(id).value = ''); 
+                if(!scaleConnected) document.getElementById('pesoBruto').value = '';
+                calcularPesos(); showToast("Campos parciais limpos.",'success');
+            } else {
+                const ti = document.getElementById('ticket').value, n = document.getElementById('nfe').value, f = document.getElementById('fornecedor').value;
+                if(!ti && !n && !f && !l && !m && !u && !t && !b) return showToast("O formulário já está vazio.",'warning');
+                ['ticket','nfe','fornecedor','localizacao','material','unidade','pesoTara'].forEach(id => document.getElementById(id).value = '');
+                if(!scaleConnected) document.getElementById('pesoBruto').value = ''; 
+                unlockFields(); calcularPesos(); showToast("Tudo limpo.",'success');
             }
+            saveFormState();
         }
         
-        let itemParaRemover = null; function pedirRemocao(id){ itemParaRemover=id; document.getElementById('confirmModal').classList.remove('hidden'); } function fecharConfirmacao(){ itemParaRemover=null; document.getElementById('confirmModal').classList.add('hidden'); } function confirmarExclusao(){ if(itemParaRemover!==null){ let d=getDb().filter(i=>i.id!==itemParaRemover);saveDb(d);if(d.length===0)unlockFields();showToast("Registo removido.","info");itemParaRemover=null;} document.getElementById('confirmModal').classList.add('hidden'); }
+        let itemParaRemover = null; 
+        function pedirRemocao(id) { itemParaRemover = id; document.getElementById('confirmModal').classList.remove('hidden'); } 
+        function fecharConfirmacao() { itemParaRemover = null; document.getElementById('confirmModal').classList.add('hidden'); } 
+        function confirmarExclusao() { 
+            if(itemParaRemover !== null) { 
+                let d = getDb().filter(i => i.id !== itemParaRemover); saveDb(d); 
+                if(d.length === 0) unlockFields(); 
+                showToast("Registo removido.","info"); itemParaRemover = null;
+            } 
+            document.getElementById('confirmModal').classList.add('hidden'); 
+        }
 
-        function renderHistory(){const b=document.querySelector('#historyTable tbody');b.innerHTML='';getDb().forEach(i=>{b.innerHTML+=`<tr><td style="text-align:center">${i.ticket}</td><td>${i.material}</td><td>${i.local||'-'}</td><td style="text-align:right;color:var(--primary);font-weight:bold">${i.liquido} kg</td><td style="text-align:right">${i.tara} kg</td><td style="text-align:right">${i.bruto} kg</td><td style="text-align:center"><button class="btn-danger" style="padding:5px 8px" onclick="pedirRemocao(${i.id})"><i class="fa-solid fa-trash"></i></button></td></tr>`})}
-        function fecharEtiqueta(){document.getElementById('etiquetaModal').style.display='none'} function imprimirEtiqueta(){document.body.classList.add('printing-label');window.print();document.body.classList.remove('printing-label')}
+        function renderHistory() {
+            const b = document.querySelector('#historyTable tbody'); b.innerHTML = '';
+            getDb().forEach(i => {
+                b.innerHTML += `<tr><td>${i.material}</td><td>${i.local||'-'}</td><td>${i.unidade||'-'}</td><td style="text-align:right;color:var(--primary);font-weight:bold">${i.liquido} kg</td><td style="text-align:right">${i.tara} kg</td><td style="text-align:right">${i.bruto} kg</td><td style="text-align:center"><button class="btn-danger" style="padding:5px 8px" onclick="pedirRemocao(${i.id})"><i class="fa-solid fa-trash"></i></button></td></tr>`
+            });
+        }
+        
+        function fecharEtiqueta() { document.getElementById('etiquetaModal').style.display = 'none'; } 
+        function imprimirEtiqueta() { document.body.classList.add('printing-label'); window.print(); document.body.classList.remove('printing-label'); }
         
         function gerarRelatorio(){ 
             const db=getDb();if(!db.length)return showToast("Sem registos.",'warning'); 
             let tb=0,tt=0,tl=0,rw=''; 
-            
-            db.forEach(i=>{
+            db.slice().reverse().forEach(i=>{
                 tb+=parseFloat(i.bruto||0);tt+=parseFloat(i.tara||0);tl+=parseFloat(i.liquido||0);
-                rw+=`<tr><td style="text-align:center">${i.ticket}</td><td>${i.material}</td><td>${i.local||'-'}</td><td style="text-align:center">${i.unidade||'-'}</td><td style="text-align:right">${i.bruto}</td><td style="text-align:right">${i.tara}</td><td style="text-align:right;font-weight:bold">${i.liquido}</td></tr>`
+                rw+=`<tr><td>${i.material}</td><td>${i.local||'-'}</td><td style="text-align:center">${i.unidade||'-'}</td><td style="text-align:right">${i.bruto}</td><td style="text-align:right">${i.tara}</td><td style="text-align:right;font-weight:bold">${i.liquido}</td></tr>`
             }); 
-            
-            document.body.setAttribute('data-filename',`RPMP_${new Date().toLocaleDateString('pt-BR').replace(/\//g,'-')}_${db[0].fornecedor}_${tb.toFixed(2)}kg`); 
-            
-            document.getElementById('relatorioConteudo').innerHTML=`
-                <div class="relatorio-header">
-                    <img src="../photos/logo-latem.png" style="max-height:60px;margin-bottom:10px">
-                    <h2>Relatório de Pesagem de Matéria Prima</h2>
-                </div>
-                
+            const horaStr = new Date().toLocaleTimeString('pt-BR').replace(/:/g, '-');
+            const filename = `RPMP_${new Date().toLocaleDateString('pt-BR').replace(/\//g,'-')}_${horaStr}_${db[0].ticket}_${db[0].fornecedor}_${tl.toFixed(2)}kg`;
+            const conteudoHTML = `
                 <div style="display: flex; justify-content: space-between; border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; background: #f9f9f9; font-size:14px;">
                     <div style="text-align: left;">
-                        <div><strong>Data:</strong> ${new Date().toLocaleDateString('pt-BR')}</div>
-                        <div style="margin-top:4px"><strong>Hora:</strong> ${new Date().toLocaleTimeString('pt-BR')}</div>
-                        <div style="margin-top:4px"><strong>Responsável:</strong> ${currentUser.toUpperCase()}</div>
-                    </div>
-                    <div style="text-align: right;">
                         <div><strong>Ticket:</strong> ${db[0].ticket}</div>
                         <div style="margin-top:4px"><strong>Nota Fiscal:</strong> ${db[0].nfe || '---'}</div>
                         <div style="margin-top:4px"><strong>Fornecedor:</strong> ${db[0].fornecedor}</div>
                     </div>
                 </div>
-                
                 <div style="display: flex; justify-content: space-around; border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; background: #f9f9f9; font-size:15px; font-weight: bold;">
                     <span>Peso Bruto Total: ${tb.toFixed(2)} kg</span>
                     <span>Tara Total: ${tt.toFixed(2)} kg</span>
                     <span>Peso Líquido Total: ${tl.toFixed(2)} kg</span>
                 </div>
-                
-                <table class="relatorio-table">
-                    <thead><tr><th style="text-align:center">Ticket</th><th>Material</th><th>Local</th><th style="text-align:center">Unidade</th><th style="text-align:right">Peso Bruto (kg)</th><th style="text-align:right">Tara (kg)</th><th style="text-align:right">Peso Líquido (kg)</th></tr></thead>
+                <table>
+                    <thead><tr><th>Material</th><th>Localização</th><th style="text-align:center">Unidade</th><th style="text-align:right">Peso Bruto (kg)</th><th style="text-align:right">Tara (kg)</th><th style="text-align:right">Peso Líquido (kg)</th></tr></thead>
                     <tbody>${rw}</tbody>
                 </table>
-                <div style="margin-top:30px;text-align:center;font-size:12px;color:#333;border-top:1px dashed #ccc;padding-top:10px">
-                    Data: ${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR')} | Operador: ${currentUser.toUpperCase()}
-                </div>
             `; 
-            document.getElementById('relatorioModal').style.display='flex'; 
-        }
-        function fecharRelatorio(){document.getElementById('relatorioModal').style.display='none'}
-        function imprimirRelatorioReal(){const o=document.title;document.title=document.body.getAttribute('data-filename');document.body.classList.add('printing-report');window.print();document.body.classList.remove('printing-report');document.title=o;localStorage.removeItem('latem_db_v2');renderHistory();unlockFields();limparTudo();fecharRelatorio();showToast("Relatório impresso.",'success')}
-        
-        window.onload=()=>{
-            carregarOperador(); 
+            baixarArquivoRelatorio("Relatório de Pesagem de Matéria Prima", conteudoHTML, filename, currentUser);
+            localStorage.removeItem('latem_db_v2');
             renderHistory();
-            const d=getDb();
-            if(d.length>0){
+            unlockFields();
+            limparTudo();
+        }
+        
+        window.onload = () => {
+            carregarOperador(); 
+            setupAutocomplete('fornecedor', CONFIG.fornecedores);
+            setupAutocomplete('material', CONFIG.materiais);
+            setupAutocomplete('localizacao', CONFIG.locais);
+            setupAutocomplete('unidade', CONFIG.unidades);
+            loadFormState();
+            renderHistory();
+            const d = getDb();
+            if(d.length > 0) {
                 lockFields();
-                document.getElementById('ticket').value=d[0].ticket;
-                document.getElementById('nfe').value=d[0].nfe||'';
-                document.getElementById('fornecedor').value=d[0].fornecedor;
-                showToast("Atenção: Pesagem em andamento.","info")
+                document.getElementById('ticket').value = d[0].ticket;
+                document.getElementById('nfe').value = d[0].nfe || '';
+                document.getElementById('fornecedor').value = d[0].fornecedor;
+                showToast("Atenção: Pesagem em andamento.", "info");
             } 
-            autoConnectScale()
+            autoConnectScale();
         }
     </script>
 </body>
