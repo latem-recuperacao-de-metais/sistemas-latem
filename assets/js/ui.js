@@ -59,16 +59,27 @@ function setupAutocomplete(inputId, optionsArray) {
     function showOptions(filterStr) {
         if(input.disabled || input.readOnly) return;
         list.innerHTML = '';
+        
         const filtered = filterStr ? optionsArray.filter(o => o.toLowerCase().includes(filterStr.toLowerCase())) : optionsArray;
+        
+        // A MAGIA ACONTECE AQUI:
+        // Se a palavra digitada for exatamente igual à opção final, esconde a lista!
+        if (filtered.length === 1 && filterStr && filtered[0].toLowerCase() === filterStr.toLowerCase()) {
+            list.classList.add('hidden');
+            return;
+        }
+
         if (filtered.length === 0) { list.classList.add('hidden'); return; }
+        
         filtered.forEach(o => {
             const li = document.createElement('li');
             li.textContent = o;
             li.onmousedown = (e) => { 
                 e.preventDefault(); 
                 input.value = o; 
-                list.classList.add('hidden'); 
-                input.dispatchEvent(new Event('input')); 
+                input.dispatchEvent(new Event('input')); // Dispara os cálculos/gravação
+                list.classList.add('hidden'); // Força a lista a fechar
+                input.blur(); // Tira a barra a piscar (foco) indicando que a seleção terminou
             };
             list.appendChild(li);
         });
