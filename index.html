@@ -7,29 +7,7 @@
     <link rel="icon" type="image/png" href="photos/logo-latem.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <link rel="stylesheet" href="assets/css/style.css">
-    
-    <style>
-        .login-box { background: white; padding: 40px; border-radius: 20px; width: 400px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2); overflow: visible; }
-        .main-content { flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 20px; height: 100vh; overflow-y: auto; }
-        .dashboard-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; } 
-        .dashboard-title { text-align: center; margin-bottom: 40px; color: var(--text-main); } 
-        .dashboard-title h2 { font-size: 2rem; font-weight: 700; margin-bottom: 10px; }
-        .systems-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; max-width: 900px; width: 100%; }
-        .system-card { background: var(--bg-card); border-radius: 16px; padding: 30px 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; display: flex; flex-direction: column; align-items: center; text-align: center; text-decoration: none; transition: all 0.3s ease; position: relative; overflow: hidden; }
-        .system-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--primary); transform: scaleX(0); transition: transform 0.3s ease; transform-origin: left; }
-        .system-card:hover { transform: translateY(-5px); box-shadow: 0 12px 20px -5px rgba(0,0,0,0.1); border-color: #cbd5e1; } 
-        .system-card:hover::before { transform: scaleX(1); }
-        .icon-wrapper { width: 70px; height: 70px; background: #eff6ff; color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 20px; transition: 0.3s; }
-        .system-card:hover .icon-wrapper { background: var(--primary); color: white; } 
-        .system-card h3 { font-size: 1.2rem; color: var(--text-main); margin-bottom: 10px; font-weight: 700; } 
-        .system-card p { font-size: 0.9rem; color: var(--secondary); margin-bottom: 20px; }
-        .btn-access { background: var(--bg-body); color: var(--primary); padding: 8px 20px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; transition: 0.2s; } 
-        .system-card:hover .btn-access { background: var(--primary); color: white; }
-        
-        @media (max-width: 768px) { .systems-grid { grid-template-columns: 1fr; } .sidebar { display: none; } }
-    </style>
 </head>
 <body>
     <div id="toast-container"></div>
@@ -38,7 +16,7 @@
         <div style="background:white;padding:40px;border-radius:20px;box-shadow:0 10px 25px rgba(0,0,0,0.1);max-width:450px;text-align:center">
             <i class="fa-solid fa-triangle-exclamation" style="font-size:3.5rem;color:var(--warning);margin-bottom:20px"></i>
             <h2 style="margin-bottom:10px;color:var(--text-main)">Sistema já aberto!</h2>
-            <p style="color:var(--secondary);margin-bottom:25px;line-height:1.5">Identifiquei um sistema da Latem já em uso em outra aba. Volte para a aba que já está aberta para evitar conflitos de dados.</p>
+            <p style="color:var(--secondary);margin-bottom:25px;line-height:1.5">Identifiquei um sistema da Latem já em outra aba. Volte para a aba que já está aberta para evitar conflitos de dados.</p>
         </div>
     </div>
     
@@ -122,63 +100,9 @@
         </div>
     </main>
 
-    <script src="assets/js/app.js"></script>
-
-    <script>
-        window.onload = () => {
-            const userNames = CONFIG.usuarios.map(u => u.user);
-            setupAutocomplete('username', userNames);
-            
-            const loggedUser = localStorage.getItem('latem_user');
-            if(loggedUser) {
-                document.getElementById('loginModal').classList.add('hidden');
-                document.getElementById('userNameDisplay').innerText = loggedUser;
-                document.getElementById('userAvatarIcon').innerText = loggedUser.charAt(0).toUpperCase();
-                document.getElementById('welcomeMessage').innerText = "Bem-vindo(a), " + loggedUser + "!";
-            } else { 
-                document.getElementById('loginModal').classList.remove('hidden'); 
-                document.getElementById('username').focus();
-            }
-        };
-
-        document.getElementById('loginForm').addEventListener('submit', (e) => {
-            e.preventDefault(); 
-            const u = document.getElementById('username').value.trim();
-            const p = document.getElementById('password').value;
-            
-            const f = CONFIG.usuarios.find(x => x.user.toLowerCase() === u.toLowerCase() && x.pass === p);
-            
-            if(f) {
-                localStorage.setItem('latem_user', f.user); 
-                document.getElementById('loginModal').classList.add('hidden');
-                document.getElementById('userNameDisplay').innerText = f.user; 
-                document.getElementById('userAvatarIcon').innerText = f.user.charAt(0).toUpperCase();
-                document.getElementById('welcomeMessage').innerText = "Bem-vindo(a), " + f.user + "!"; 
-                document.getElementById('loginError').classList.add('hidden');
-                document.getElementById('password').value = ''; 
-                showToast("Login realizado com sucesso!", "success");
-            } else { 
-                document.getElementById('loginError').classList.remove('hidden'); 
-                const loginBox = document.querySelector('.login-box');
-                loginBox.style.transform = 'translateX(-10px)';
-                setTimeout(() => loginBox.style.transform = 'translateX(10px)', 100);
-                setTimeout(() => loginBox.style.transform = 'translateX(-10px)', 200);
-                setTimeout(() => loginBox.style.transform = 'translateX(0)', 300);
-            }
-        });
-
-        function logout() {
-            localStorage.removeItem('latem_user'); 
-            showToast("Sessão encerrada.", "info");
-            setTimeout(() => {
-                document.getElementById('loginModal').classList.remove('hidden');
-                document.getElementById('loginForm').reset();
-                document.getElementById('userNameDisplay').innerText = '---';
-                document.getElementById('userAvatarIcon').innerHTML = '<i class="fa-solid fa-user"></i>';
-                document.getElementById('welcomeMessage').innerText = "Seja bem-vindo!";
-                document.getElementById('username').focus();
-            }, 500);
-        }
-    </script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/ui.js"></script>
+    <script src="assets/js/documents.js"></script>
+    <script src="assets/js/auth.js"></script>
 </body>
 </html>
