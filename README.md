@@ -1,4 +1,4 @@
-# Sistemas Latem - Controle de Pesagem e Identificação 🏭⚖️
+# Sistemas Latem - Controle de Pesagem e Identificação 
 
 Sistema web offline-first desenvolvido para a **Latem Recuperação de Metais**. Este projeto consiste numa suite de aplicações para o chão de fábrica, focada no controlo rigoroso de entrada de matérias-primas e registo de produção de produtos acabados (Tarugos e Lingotes).
 
@@ -15,7 +15,7 @@ O projeto está dividido em 4 módulos principais operados de forma independente
 
 ## ✨ Principais Funcionalidades
 
-* **Integração com Hardware (Web Serial API):** Leitura automática do peso em tempo real comunicando diretamente com a balança ligada à porta serial (ex: COM4).
+* **Integração com Hardware (Web Serial API):** Leitura automática do peso em tempo real comunicando diretamente com a balança ligada à porta serial.
 * **Impressão Térmica Dinâmica:** Geração de etiquetas (100x70mm) com códigos de barras nativos (Libre Barcode 128) injetados diretamente para a impressora de chão de fábrica.
 * **Relatórios Inteligentes (PDF):** Conversão de tabelas e históricos de turno para formato A4 de forma nativa e sem interrupção das configurações da impressora de etiquetas.
 * **Offline-First & Local Storage:** Todo o histórico de pesagens, gestão de estado (rascunhos) e dados de formulário são salvos no navegador.
@@ -38,33 +38,27 @@ Como o sistema foi desenhado para rodar num ambiente local sem necessidade de se
 
 2. Abra o ficheiro index.html (Menu Principal) num navegador compatível com Web Serial (Google Chrome ou Microsoft Edge são recomendados).
 
-3. Para a Balança: No primeiro acesso ao módulo de pesagem, clique no status da balança e dê permissão de leitura à porta COM correspondente (ex: COM4). O navegador memorizará a permissão para reconexões automáticas.
+3. Para a Balança: No primeiro acesso ao módulo de pesagem, clique no status da balança e dê permissão de leitura à porta COM correspondente. O navegador memorizará a permissão para reconexões automáticas.
 
 4. Para Impressão Automática (Opcional): É recomendado rodar o atalho do navegador com a flag --kiosk-printing para que as etiquetas sejam impressas instantaneamente na impressora padrão do Windows, sem exibir a caixa de diálogo.
 
 ```
 /
+sistemas-latem/
 ├── assets/
-│   ├── css/
-│   │   └── style.css       # Estilos globais e regras de impressão (@media print)
-│   └── js/
-│       └── app.js          # Lógica global, gerador de relatórios e variáveis do sistema
-├── photos/
-│   └── logo-latem.png      # Identidade visual corporativa
-├── sistema_identificacao_mp/
-│   └── index.html          # Módulo de Identificação de Matéria Prima
-├── sistema_identificacao_tl/
-│   └── index.html          # Módulo de Identificação de Tarugos e Lingotes
-├── sistema_pesagem_mp/
-│   └── index.html          # Módulo de Pesagem de Matéria Prima
-├── sistema_pesagem_tl/
-│   └── index.html          # Módulo de Pesagem de Tarugos e Lingotes
-└── index.html              # Menu Principal (Hub de navegação)
+│   ├── js/
+│   │   ├── auth.js      # Segurança, Login e Bloqueio Mobile
+│   │   ├── balanca.js   # Driver Serial e Estabilização
+│   │   ├── config.js    # Listas de Materiais e Operadores
+│   │   ├── documents.js # Gerador de Relatórios e Impressão
+│   │   └── ui.js        # Interface e Notificações
+│   └── css/
+│       └── style.css    # Layout Industrial Responsivo
+└── index.html           # Dashboard Central
 ```
 
-👨‍💻 Autor
+Desenvolvedor:
 Diego Redekop
-Desenvolvedor do Sistema
 
 Latem Recuperação de Metais © 2026 - Todos os direitos reservados.
 
