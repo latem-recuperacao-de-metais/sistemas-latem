@@ -1,3 +1,6 @@
+/* ==========================================================================
+   Variáveis e Cores 
+   ========================================================================== */
 :root {
     --primary: #2563eb;
     --primary-dark: #1e40af;
@@ -16,6 +19,9 @@
 body { background-color: var(--bg-body); color: var(--text-main); height: 100vh; overflow: hidden; display: flex; }
 .hidden { display: none !important; }
 
+/* ==========================================================================
+   Notificações e Modais 
+   ========================================================================== */
 #toast-container { position: fixed; top: 20px; right: 20px; z-index: 11000; display: flex; flex-direction: column; gap: 10px; } 
 .toast { background: white; padding: 15px 20px; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 12px; min-width: 300px; animation: slideIn 0.3s forwards; border-left: 5px solid var(--primary); font-size: 0.9rem; font-weight: 500; } 
 .toast.success { border-left-color: var(--success); } .toast.error { border-left-color: var(--danger); } .toast.warning { border-left-color: var(--warning); } .toast.info { border-left-color: var(--primary); } 
@@ -25,6 +31,9 @@ body { background-color: var(--bg-body); color: var(--text-main); height: 100vh;
 
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.95); display: flex; justify-content: center; align-items: center; z-index: 10000; }
 
+/* ==========================================================================
+   Sidebar Retrátil 
+   ========================================================================== */
 .sidebar { width: 80px; background-color: var(--display-bg); display: flex; flex-direction: column; align-items: center; padding-top: 20px; transition: width 0.3s; z-index: 10; } 
 .sidebar:hover { width: 200px; } 
 .logo-area { width: 60px; height: 60px; border-radius: 12px; display: flex; justify-content: center; align-items: center; margin-bottom: 40px; overflow: hidden; background: white; padding: 5px; } 
@@ -35,6 +44,9 @@ body { background-color: var(--bg-body); color: var(--text-main); height: 100vh;
 .nav-text { white-space: nowrap; opacity: 0; transition: opacity 0.2s; } 
 .sidebar:hover .nav-text { opacity: 1; }
 
+/* ==========================================================================
+   Layout Principal em Grid 
+   ========================================================================== */
 .main-content { 
     flex: 1; 
     padding: 20px; 
@@ -45,44 +57,32 @@ body { background-color: var(--bg-body); color: var(--text-main); height: 100vh;
     height: 100vh; 
 }
 
+body:has(.dashboard-wrapper) .main-content {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
 header { 
     grid-column: 1 / -1; 
     display: flex; justify-content: space-between; align-items: center; 
     background: var(--bg-card); padding: 10px 25px; border-radius: 12px; 
     box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); 
 } 
+.header-left h1 { font-size: 1.5rem; font-weight: 700; color: var(--text-main); }
+.status-badge { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+.status-badge.manual { cursor: default; }
 .header-center { font-size: 1.2rem; font-weight: 600; display: flex; gap: 10px; align-items: center; color: var(--text-main); } 
 .clock-display { background: #f1f5f9; padding: 5px 15px; border-radius: 8px; font-family: 'Courier New', monospace; font-weight: 700; color: var(--primary); } 
 .user-info { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; } 
 .user-avatar { width: 35px; height: 35px; background: var(--secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; text-transform: uppercase; font-weight: bold; }
 
-.card {
-    background: var(--bg-card);
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-.card-title {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 15px;
-    color: var(--secondary);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid #f1f5f9;
-    padding-bottom: 10px;
-}
-.form-section {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
+/* ==========================================================================
+   Cartões, Formulários e Botões 
+   ========================================================================== */
+.card { background: var(--bg-card); border-radius: 16px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); display: flex; flex-direction: column; overflow: hidden; }
+.card-title { font-size: 1rem; font-weight: 600; margin-bottom: 15px; color: var(--secondary); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px; }
+.form-section { display: flex; flex-direction: column; gap: 12px; overflow-y: auto; overflow-x: hidden; }
 
 .btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; font-size: 0.95rem; white-space: nowrap; } 
 .btn-primary { background: var(--primary); color: white; } 
@@ -97,7 +97,91 @@ input, select { padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; fo
 input:focus, select:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); } 
 input:read-only, select:disabled, input:disabled { background-color: #e2e8f0; cursor: not-allowed; color: #64748b; }
 
+/* ==========================================================================
+   Exibição da Balança 
+   ========================================================================== */
+.scale-section { display:flex; flex-direction:column; gap:15px; overflow-y:hidden; } 
+.display-container { background:var(--display-bg); color:var(--display-text); padding:20px 30px; border-radius:16px; text-align:right; position:relative; box-shadow:inset 0 0 30px rgba(0,0,0,0.6); display:flex; flex-direction:column; justify-content:center; height:150px; flex-shrink:0; } 
+.display-label { position:absolute; top:20px; left:20px; font-size:0.9rem; color:#64748b; font-weight:600; text-transform:uppercase; } 
+.weight-value { font-family:'Courier New', monospace; font-size:4.5rem; font-weight:700; text-shadow:0 0 15px rgba(56,189,248,0.4); } 
+.display-offline .weight-value { color:#334155; text-shadow:none; } 
+.unit { font-size:1.5rem; color:#64748b; position:absolute; bottom:25px; right:30px; }
+.weight-controls { display:grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap:20px; margin-top:5px; flex-shrink:0; } 
+.weight-input-card { background:#f8fafc; padding:12px 15px; border-radius:12px; border:1px solid #e2e8f0; display:flex; flex-direction:column; justify-content:center; } 
+.weight-input-card label { margin-bottom:5px; } 
+.weight-input-card input { font-size:1.4rem; font-weight:700; border:none; background:transparent!important; border-bottom:2px solid #cbd5e1; width:100%; text-align:right; padding:5px 0; border-radius:0; } 
+.weight-input-card input[readonly] { color:var(--secondary); cursor:not-allowed; border-bottom-style:dashed; } 
+.highlight { background:#ecfdf5; border-color:#a7f3d0; } 
+.highlight input { color:var(--success); border-color:var(--success); } 
+.qtd-card { background:#fff7ed; border-color:#fed7aa; } 
+.qtd-card input { color:#c2410c; border-color:#f97316; text-align:center; }
+.actions { display:flex; gap:15px; flex-shrink:0; } 
+
+/* ==========================================================================
+   Tabela de Histórico 
+   ========================================================================== */
+.history-section { flex:1; display:flex; flex-direction:column; overflow:hidden; margin-top:10px; background:white; border-radius:12px; padding:15px; border:1px solid #e2e8f0; } 
+.table-container { overflow-y:auto; flex:1; } 
+table { width:100%; border-collapse:collapse; font-size:0.85rem; } 
+th { text-align:left; padding:12px; background:#f8fafc; color:var(--secondary); font-weight:700; position:sticky; top:0; z-index:5; } 
+td { padding:10px 12px; border-bottom:1px solid #e2e8f0; vertical-align:middle; }
+
+/* ==========================================================================
+   Autocompletar    
+   ========================================================================== */
 .custom-autocomplete-wrapper { position: relative; width: 100%; }
 .custom-autocomplete-list { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #e2e8f0; border-radius: 8px; max-height: 200px; overflow-y: auto; z-index: 10001; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.2); list-style: none; padding: 0; margin-top: 4px; text-align: left; }
 .custom-autocomplete-list li { padding: 10px 15px; cursor: pointer; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; color: var(--text-main); }
 .custom-autocomplete-list li:hover { background: #eff6ff; color: var(--primary); font-weight: 600; }
+
+/* ==========================================================================
+   Central de Sistemas / Index 
+   ========================================================================== */
+.login-box { background: white; padding: 40px; border-radius: 20px; width: 400px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2); overflow: visible; }
+.dashboard-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; } 
+.dashboard-title { text-align: center; margin-bottom: 40px; color: var(--text-main); } 
+.dashboard-title h2 { font-size: 2rem; font-weight: 700; margin-bottom: 10px; }
+.systems-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; max-width: 900px; width: 100%; }
+.system-card { background: var(--bg-card); border-radius: 16px; padding: 30px 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; display: flex; flex-direction: column; align-items: center; text-align: center; text-decoration: none; transition: all 0.3s ease; position: relative; overflow: hidden; }
+.system-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--primary); transform: scaleX(0); transition: transform 0.3s ease; transform-origin: left; }
+.system-card:hover { transform: translateY(-5px); box-shadow: 0 12px 20px -5px rgba(0,0,0,0.1); border-color: #cbd5e1; } 
+.system-card:hover::before { transform: scaleX(1); }
+.icon-wrapper { width: 70px; height: 70px; background: #eff6ff; color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 20px; transition: 0.3s; }
+.system-card:hover .icon-wrapper { background: var(--primary); color: white; } 
+.system-card h3 { font-size: 1.2rem; color: var(--text-main); margin-bottom: 10px; font-weight: 700; } 
+.system-card p { font-size: 0.9rem; color: var(--secondary); margin-bottom: 20px; }
+.btn-access { background: var(--bg-body); color: var(--primary); padding: 8px 20px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; transition: 0.2s; margin-top: 15px; } 
+.system-card:hover .btn-access { background: var(--primary); color: white; }
+
+@media (max-width: 768px) { .systems-grid { grid-template-columns: 1fr; } .sidebar { display: none; } }
+
+/* ==========================================================================
+   Configurações da Etiqueta Modal
+   ========================================================================== */
+.etiqueta-modal { background:white; width: 420px; display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index:2000; flex-direction:column; box-shadow:0 0 50px rgba(0,0,0,0.5); font-family:'Courier New', monospace; border-radius:8px; overflow:hidden; max-height:90vh; }
+.etiqueta-content { padding:15px; display:flex; flex-direction:column; background: white; height:265px; box-sizing:border-box; }
+.etiqueta-scroll-area { overflow-y:auto; padding:15px; background:#f1f5f9; display:flex; flex-direction:column; gap:15px; flex:1; }
+.etiqueta-individual { background:white; padding:8px; border:1px solid #ccc; box-shadow:0 2px 4px rgba(0,0,0,0.05); display:flex; flex-direction:column; justify-content:space-between; height:265px; box-sizing:border-box; }
+.btn-print-area { padding:10px; border-top:1px solid #eee; background:#f8fafc; display:flex; gap:10px; }
+.etiqueta-header-title { padding:15px; border-bottom:1px solid #e2e8f0; text-align:center; font-weight:bold; background:white; }
+
+/* ==========================================================================
+   Impressão Térmica 
+   ========================================================================== */
+@media print { 
+    @page { size: 100mm 70mm; margin: 0; }
+    
+    body.printing-label { margin: 0 !important; padding: 0 !important; background: white !important; }
+    .printing-label * { visibility: hidden; } 
+    .printing-label #etiquetaModal, .printing-label #etiquetaModal * { visibility: visible; } 
+    
+    .printing-label #etiquetaModal { position: absolute !important; left: 0 !important; top: 0 !important; width: 100mm !important; background: white !important; display: block !important; border: none !important; box-shadow: none !important; transform: none !important; margin: 0 !important; max-height: none !important; border-radius: 0 !important; overflow: visible !important; } 
+    .printing-label .etiqueta-scroll-area { padding: 0 !important; background: white !important; overflow: visible !important; gap: 0 !important; display: block !important; } 
+    .printing-label .etiqueta-individual { break-after: page; page-break-after: always; border: none !important; padding: 3mm !important; width: 100mm; height: 70mm; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; box-shadow: none !important; margin: 0 !important; } 
+    .printing-label .etiqueta-individual:last-child { break-after: auto; page-break-after: auto; } 
+    
+    .printing-label #etiquetaArea { padding: 3mm !important; width: 100mm !important; height: 70mm !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; box-sizing: border-box !important; }
+    
+    .printing-label .btn-print-area, .printing-label .etiqueta-controls, .printing-label .etiqueta-header-title { display: none !important; }
+    header, .sidebar, .actions, .form-section, .weight-controls { display: none !important; } 
+}
