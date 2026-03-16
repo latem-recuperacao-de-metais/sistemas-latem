@@ -1,6 +1,3 @@
-// ==========================================
-// PREVENÇÃO DE ABAS DUPLICADAS
-// ==========================================
 const globalTabChannel = new BroadcastChannel('latem_trava_abas');
 globalTabChannel.onmessage = (e) => {
     if(e.data === 'TEM_ALGUEM_AI') globalTabChannel.postMessage('EU_JA_ESTOU_AQUI');
@@ -11,9 +8,6 @@ globalTabChannel.onmessage = (e) => {
 };
 setTimeout(() => globalTabChannel.postMessage('TEM_ALGUEM_AI'), 100);
 
-// ==========================================
-// RELÓGIO E DATA
-// ==========================================
 function updateClock(){
     const n = new Date();
     const clockEl = document.getElementById('clock');
@@ -23,9 +17,6 @@ function updateClock(){
 }
 setInterval(updateClock, 1000); 
 
-// ==========================================
-// NOTIFICAÇÕES (TOAST)
-// ==========================================
 function showToast(msg, type='success'){
     const c = document.getElementById('toast-container');
     if(!c) return;
@@ -40,9 +31,6 @@ function showToast(msg, type='success'){
     }, 3000);
 }
 
-// ==========================================
-// AUTOCOMPLETAR GLOBAL
-// ==========================================
 function setupAutocomplete(inputId, optionsArray) {
     const input = document.getElementById(inputId);
     if(!input) return;
@@ -62,8 +50,6 @@ function setupAutocomplete(inputId, optionsArray) {
         
         const filtered = filterStr ? optionsArray.filter(o => o.toLowerCase().includes(filterStr.toLowerCase())) : optionsArray;
         
-        // A MAGIA ACONTECE AQUI:
-        // Se a palavra digitada for exatamente igual à opção final, esconde a lista!
         if (filtered.length === 1 && filterStr && filtered[0].toLowerCase() === filterStr.toLowerCase()) {
             list.classList.add('hidden');
             return;
@@ -77,9 +63,9 @@ function setupAutocomplete(inputId, optionsArray) {
             li.onmousedown = (e) => { 
                 e.preventDefault(); 
                 input.value = o; 
-                input.dispatchEvent(new Event('input')); // Dispara os cálculos/gravação
-                list.classList.add('hidden'); // Força a lista a fechar
-                input.blur(); // Tira a barra a piscar (foco) indicando que a seleção terminou
+                input.dispatchEvent(new Event('input')); 
+                list.classList.add('hidden'); 
+                input.blur(); 
             };
             list.appendChild(li);
         });

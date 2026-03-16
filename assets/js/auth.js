@@ -1,6 +1,3 @@
-// ==========================================
-// BLOQUEIO DE DISPOSITIVOS MÓVEIS
-// ==========================================
 function verificarDispositivo() {
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     const isSmallScreen = window.innerWidth <= 800;
@@ -18,9 +15,6 @@ function verificarDispositivo() {
     }
 }
 
-// ==========================================
-// CONTROLE DE USUÁRIO E LOGOUT GLOBAL
-// ==========================================
 let currentUser = 'Operador';
 
 function carregarOperador() { 
@@ -58,9 +52,6 @@ function logout() {
     }, 1000);
 }
 
-// ==========================================
-// INICIALIZAÇÃO DA SESSÃO E TELA DE LOGIN
-// ==========================================
 document.addEventListener('DOMContentLoaded', () => {
     verificarDispositivo(); 
     

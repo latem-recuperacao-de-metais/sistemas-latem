@@ -43,18 +43,32 @@ Como o sistema foi desenhado para rodar num ambiente local sem necessidade de se
 4. Para Impressão Automática (Opcional): É recomendado rodar o atalho do navegador com a flag --kiosk-printing para que as etiquetas sejam impressas instantaneamente na impressora padrão do Windows, sem exibir a caixa de diálogo.
 
 ```
-/
 sistemas-latem/
 ├── assets/
-│   ├── js/
-│   │   ├── auth.js      # Segurança, Login e Bloqueio Mobile
-│   │   ├── balanca.js   # Driver Serial e Estabilização
-│   │   ├── config.js    # Listas de Materiais e Operadores
-│   │   ├── documents.js # Gerador de Relatórios e Impressão
-│   │   └── ui.js        # Interface e Notificações
-│   └── css/
-│       └── style.css    # Layout Industrial Responsivo
-└── index.html           # Dashboard Central
+│   ├── css/
+│   │   └── style.css                 # Layout industrial responsivo e regras de impressão (Etiquetas 95mm)
+│   └── js/
+│       ├── auth.js                   # Segurança, Login e Bloqueio Mobile
+│       ├── balanca.js                # Driver Web Serial e algoritmo de estabilização
+│       ├── config.js                 # Banco de dados local (Ligas, Operadores, etc.)
+│       ├── documents.js              # Motor de geração de relatórios em PDF
+│       ├── id_mp.js                  # Lógica de Identificação de Matéria Prima
+│       ├── id_tl.js                  # Lógica de Identificação de Tarugos e Lingotes
+│       ├── pesagem_mp.js             # Lógica de Pesagem de Matéria Prima
+│       ├── pesagem_tl.js             # Lógica de Pesagem de Tarugos e Lingotes
+│       └── ui.js                     # Interface, Autocompletar inteligente e Notificações (Toasts)
+├── photos/
+│   └── logo-latem.png                # Logotipo utilizado nas etiquetas térmicas e relatórios
+├── sistema_identificacao_mp/
+│   └── index.html                    # Tela operacional: Identificação de Matéria Prima
+├── sistema_identificacao_tl/
+│   └── index.html                    # Tela operacional: Identificação de Tarugos e Lingotes
+├── sistema_pesagem_mp/
+│   └── index.html                    # Tela operacional: Pesagem de Matéria Prima
+├── sistema_pesagem_tl/
+│   └── index.html                    # Tela operacional: Pesagem de Tarugos e Lingotes
+├── README.md                         # Documentação oficial do projeto no GitHub
+└── index.html                        # Dashboard Central (Menu de acesso e validação)
 ```
 
 Desenvolvedor:

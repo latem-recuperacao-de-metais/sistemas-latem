@@ -1,6 +1,3 @@
-// ==========================================
-// VARIÁVEIS GLOBAIS DA BALANÇA
-// ==========================================
 let scaleConnected = false;
 let serialPort = null;
 let serialReader = null;
@@ -10,9 +7,6 @@ let lastWeight = -1;
 let stableTimer = null;
 let isStable = false;
 
-// ==========================================
-// DESCONEXÃO SEGURA AO FECHAR A PÁGINA
-// ==========================================
 window.addEventListener('beforeunload', async () => {
     if (scaleConnected) {
         keepReading = false;
@@ -22,9 +16,6 @@ window.addEventListener('beforeunload', async () => {
     }
 });
 
-// ==========================================
-// CONECTAR / DESCONECTAR BALANÇA
-// ==========================================
 async function conectarBalanca() {
     if (scaleConnected) {
         keepReading = false;
@@ -57,9 +48,6 @@ async function conectarBalanca() {
     }
 }
 
-// ==========================================
-// AUTO-CONEXÃO AO ABRIR A PÁGINA
-// ==========================================
 async function autoConnectScale() {
     if (!('serial' in navigator)) return;
     try {
@@ -89,9 +77,6 @@ async function autoConnectScale() {
     }
 }
 
-// ==========================================
-// ATUALIZAR INTERFACE VISUAL
-// ==========================================
 function updateStatus(isConnected) {
     const badge = document.getElementById('scaleStatus');
     const text = document.getElementById('statusText');
@@ -120,9 +105,6 @@ function updateStatus(isConnected) {
     }
 }
 
-// ==========================================
-// SISTEMA DE ESTABILIZAÇÃO DE PESO
-// ==========================================
 function atualizarStatusEstabilizacao(stable, msg) {
     const btn = document.getElementById('btnPesar');
     const statusEl = document.getElementById('estabilizacaoStatus');
@@ -163,9 +145,6 @@ function processarNovoPeso(peso) {
     }
 }
 
-// ==========================================
-// LOOP DE LEITURA DA PORTA SERIAL
-// ==========================================
 async function readSerialLoop() {
     const textDecoder = new TextDecoderStream();
     serialPort.readable.pipeTo(textDecoder.writable);

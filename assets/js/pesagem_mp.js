@@ -1,6 +1,3 @@
-// ==========================================
-// BANCO DE DADOS LOCAL E ESTADO DO FORMULÁRIO
-// ==========================================
 function getDb() { return JSON.parse(localStorage.getItem('latem_pesagem_mp_bd')) || []; }
 function saveDb(d) { localStorage.setItem('latem_pesagem_mp_bd', JSON.stringify(d)); renderHistory(); }
 
@@ -31,9 +28,6 @@ function loadFormState() {
 document.querySelector('.form-section').addEventListener('input', saveFormState);
 document.querySelector('.weight-controls').addEventListener('input', saveFormState);
 
-// ==========================================
-// CÁLCULOS E BLOQUEIOS
-// ==========================================
 function calcularPesos() {
     const b = parseFloat(document.getElementById('pesoBruto').value) || 0;
     const t = parseFloat(document.getElementById('pesoTara').value) || 0;
@@ -50,9 +44,6 @@ function calcularPesos() {
 function lockFields() { ['ticket','nfe','fornecedor'].forEach(id => document.getElementById(id).readOnly = true); } 
 function unlockFields() { ['ticket','nfe','fornecedor'].forEach(id => document.getElementById(id).readOnly = false); }
 
-// ==========================================
-// LIMPEZA INTELIGENTE
-// ==========================================
 function limparParcial() {
     ['material','localizacao','unidade','pesoTara'].forEach(id => document.getElementById(id).value = '');
     if(typeof scaleConnected !== 'undefined' && !scaleConnected) document.getElementById('pesoBruto').value = '';
@@ -90,9 +81,6 @@ function limparTudo() {
     saveFormState();
 }
 
-// ==========================================
-// PROCESSAR A PESAGEM E ETIQUETA
-// ==========================================
 function realizarPesagem() {
     const t = document.getElementById('ticket').value;
     const nfe = document.getElementById('nfe').value;
@@ -160,9 +148,6 @@ function gerarEtiqueta(r) {
     document.getElementById('etiquetaModal').style.display = 'flex';
 }
 
-// ==========================================
-// TABELA E EXCLUSÃO
-// ==========================================
 let itemParaRemover = null; 
 function pedirRemocao(id) { itemParaRemover = id; document.getElementById('confirmModal').classList.remove('hidden'); } 
 function fecharConfirmacao() { itemParaRemover = null; document.getElementById('confirmModal').classList.add('hidden'); } 
@@ -198,9 +183,6 @@ function renderHistory() {
     });
 }
 
-// ==========================================
-// RELATÓRIO PDF (COM SOMAS E Nº)
-// ==========================================
 function gerarRelatorio(){ 
     const db = getDb();
     if(!db.length) return showToast("Sem registos para gerar relatório.",'warning'); 
@@ -273,9 +255,6 @@ function gerarRelatorio(){
     calcularPesos();
 }
 
-// ==========================================
-// INICIALIZAÇÃO
-// ==========================================
 window.onload = () => {
     setupAutocomplete('fornecedor', CONFIG.fornecedores);
     setupAutocomplete('material', CONFIG.materiais);

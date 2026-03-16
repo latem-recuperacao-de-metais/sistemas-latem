@@ -1,6 +1,3 @@
-// ==========================================
-// GERADOR DE RELATÓRIO PDF (Com Caminho do Logo Fixo)
-// ==========================================
 function baixarArquivoRelatorio(titulo, conteudoHTML, filename, operador) {
     const dataAtual = new Date().toLocaleDateString('pt-BR');
     const horaAtual = new Date().toLocaleTimeString('pt-BR');
@@ -65,9 +62,6 @@ function baixarArquivoRelatorio(titulo, conteudoHTML, filename, operador) {
     }, 500);
 }
 
-// ==========================================
-// CONTROLE GLOBAL DE ETIQUETAS
-// ==========================================
 function fecharEtiqueta() { 
     const modal = document.getElementById('etiquetaModal');
     if(modal) modal.style.display = 'none'; 
