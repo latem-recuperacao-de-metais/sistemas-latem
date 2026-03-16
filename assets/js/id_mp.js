@@ -124,39 +124,46 @@ function realizarIdentificacao() {
 function renderEtiquetas(r) {
     const area = document.getElementById('etiquetaScrollArea');
     area.innerHTML = '';
+    
     for(let i = 1; i <= r.quantidade; i++) {
         area.innerHTML += `
-        <div class="etiqueta-individual">
+        <div class="etiqueta-individual" style="padding:2mm; display:block !important; height:auto !important; max-height:none !important; border:none !important; box-sizing:border-box; page-break-after: avoid !important; font-weight: bold !important; color: black; margin-bottom: 5mm;">
+            
             <div style="text-align:center;border-bottom:2px solid black;padding-bottom:1mm;margin-bottom:1mm">
-                <img src="../photos/logo-latem.png" style="max-height:8mm;margin-bottom:1mm" onerror="this.style.display='none'">
-                <div style="font-size:10px;font-weight:bold;letter-spacing:1px">COMPROVANTE DE IDENTIFICAÇÃO</div>
+                <img src="../photos/logo-latem.png" style="max-height:8mm;display:block;margin:0 auto 1mm auto" onerror="this.style.display='none'">
+                <span style="font-size:10px;display:block;letter-spacing:1px">COMPROVANTE DE IDENTIFICAÇÃO</span>
             </div>
-            <div style="display:flex;justify-content:space-between;font-size:10px;line-height:1.4;margin-bottom:2px;">
+            
+            <div style="font-size:10px;line-height:1.4;display:flex;justify-content:space-between;margin-bottom:2px;">
                 <div style="text-align:left;width:48%">
-                    <div><strong>Ticket:</strong> ${r.ticket}</div>
-                    <div style="margin-top:2px"><strong>Nota Fiscal:</strong> ${r.nfe || '---'}</div>
+                    <div>Ticket: ${r.ticket}</div>
+                    <div style="margin-top:2px">Nota Fiscal: ${r.nfe || '---'}</div>
                 </div>
                 <div style="text-align:right;width:50%">
-                    <div><strong>Fornecedor:</strong> ${r.fornecedor}</div>
-                    <div style="margin-top:2px"><strong>Material:</strong> ${r.material}</div>
+                    <div>Fornecedor: ${r.fornecedor}</div>
+                    <div style="margin-top:2px">Material: ${r.material}</div>
                 </div>
             </div>
-            <div style="margin-top:auto;border-top:1px dashed #000;border-bottom:1px dashed #000;padding:2mm 0;text-align:center;font-size:10px">
-                <div style="display:flex;justify-content:space-between">
-                    <span>Peso Bruto: ${r.bruto} kg</span>
+            
+            <div style="text-align:center;border-top:2px dashed #000;border-bottom:2px dashed #000;padding:3mm 0;margin:2mm 0;">
+                <div style="display:flex;justify-content:space-between;margin-bottom:2px;font-size:12px;">
+                    <span>Bruto: ${r.bruto} kg</span>
                     <span>Tara: ${r.tara} kg</span>
                 </div>
-                <div style="font-size:16px;font-weight:bold;margin:2mm 0">Peso Líquido: ${r.liquido} kg</div>
-                <div style="font-size:11px;font-weight:bold">Quantidade: ${i} / ${r.quantidade}</div>
+                <div style="font-size:18px;">Peso Líquido: ${r.liquido} kg</div>
+                <div style="font-size:14px;margin-top:2px;">Quantidade: ${i} / ${r.quantidade}</div>
             </div>
-            <div style="margin-top:2mm;text-align:center">
-                <div style="font-family:'Libre Barcode 128',cursive;font-size:32px">*${r.ticket}*</div>
+            
+            <div style="text-align:center;margin-top:2mm;">
+                <div style="font-family:'Libre Barcode 128',cursive;font-size:32px;line-height:1;font-weight:normal !important;">*${r.ticket}*</div>
+                <div style="margin-top:2mm;border-top:1px solid black;padding-top:1mm;font-size:8px;">
+                    DATA: ${r.data} | HORA: ${r.hora} | RESP.: ${r.resp.toUpperCase()}
+                </div>
             </div>
-            <div style="margin-top:3px;border-top:1px solid black;padding-top:2px;text-align:center;font-size:8px;font-weight:bold;">
-                DATA: ${r.data} | HORA: ${r.hora} | RESPONSÁVEL: ${r.resp.toUpperCase()}
-            </div>
+            
         </div>`;
     }
+    
     const modal = document.getElementById('etiquetaModal');
     if(modal) modal.style.display = 'flex';
 }

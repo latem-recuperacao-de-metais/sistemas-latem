@@ -767,9 +767,6 @@ const CONFIG = {
     ligas: ["SAE 305C","SAE 305I","SAE 306","SAE 323","SAE 329","AA 6060","AA 6060E","AA 6061","AA 6501","AA 6063","AA 6063E","AA 6351","AA 6009","AA 8112L","AA 8112I","AA 8112P","AA 8112S","AA 8112M","AA 8112H","AA 8112A","AA 8112B","LIGA T","PRE-LIGA DE TARUGO","PRE-LIGA DE LINGOTE","LIGA INDUSTRIAL"],
     
     //Máximo 13 Caracteres
-    fornos: ["12 T", "30 T", "N/ Homogenizado"],
-    
-    //Máximo 13 Caracteres
     polegadas: ["4", "5"],
     
     //Máximo 13 Caracteres
