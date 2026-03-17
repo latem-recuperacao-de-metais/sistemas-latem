@@ -219,13 +219,13 @@ function gerarRelatorio(){
             </div>
         </div>
         <div style="display: flex; justify-content: space-around; align-items: center; border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; background: #f9f9f9; font-size:15px; font-weight: bold;">
-            <span>Qtd Total: ${qtdTotal} itens</span>
+            <span>Q. Total: ${qtdTotal} un</span>
             <span style="color:#ccc">|</span>
-            <span>P. Bruto Total: ${tb.toFixed(2)} kg</span>
+            <span>P.B. Total: ${tb.toFixed(2)} kg</span>
             <span style="color:#ccc">|</span>
-            <span>Tara Total: ${tt.toFixed(2)} kg</span>
+            <span>T. Total: ${tt.toFixed(2)} kg</span>
             <span style="color:#ccc">|</span>
-            <span>P. Líquido Total: ${tl.toFixed(2)} kg</span>
+            <span>P.L. Total: ${tl.toFixed(2)} kg</span>
         </div>
         <table>
             <thead>

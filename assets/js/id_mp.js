@@ -114,8 +114,13 @@ function renderEtiquetas(r) {
     area.innerHTML = '';
     
     for(let i = 1; i <= r.quantidade; i++) {
+        // A MÁGICA AQUI: Força o pulo de página (page-break) após cada etiqueta, 
+        // mas evita na última para não soltar uma folha em branco no final.
+        const pageBreak = (i === r.quantidade) ? 'avoid' : 'always';
+        const breakCss = (i === r.quantidade) ? 'avoid' : 'page';
+        
         area.innerHTML += `
-        <div class="etiqueta-individual" style="padding:2mm; display:block !important; height:auto !important; max-height:none !important; border:none !important; box-sizing:border-box; page-break-after: avoid !important; font-weight: bold !important; color: black; margin-bottom: 5mm;">
+        <div class="etiqueta-individual" style="padding:2mm; display:block !important; height:auto !important; max-height:none !important; border:none !important; box-sizing:border-box; page-break-after: ${pageBreak} !important; break-after: ${breakCss} !important; font-weight: bold !important; color: black; margin: 0 !important;">
             
             <div style="text-align:center;border-bottom:2px solid black;padding-bottom:1mm;margin-bottom:1mm">
                 <img src="../photos/logo-latem.png" style="max-height:8mm;display:block;margin:0 auto 1mm auto" onerror="this.style.display='none'">
@@ -229,13 +234,13 @@ function gerarRelatorio(){
             </div>
         </div>
         <div style="display: flex; justify-content: space-around; align-items: center; border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; background: #f9f9f9; font-size:15px; font-weight: bold;">
-            <span>Qtd Total: ${qtdTotal} un</span>
+            <span>Q. Total: ${qtdTotal} un</span>
             <span style="color:#ccc">|</span>
-            <span>P. Bruto Total: ${tb.toFixed(2)} kg</span>
+            <span>P.B. Total: ${tb.toFixed(2)} kg</span>
             <span style="color:#ccc">|</span>
-            <span>Tara Total: ${tt.toFixed(2)} kg</span>
+            <span>T. Total: ${tt.toFixed(2)} kg</span>
             <span style="color:#ccc">|</span>
-            <span>P. Líquido Total: ${tl.toFixed(2)} kg</span>
+            <span>P.L. Total: ${tl.toFixed(2)} kg</span>
         </div>
         <table>
             <thead>
