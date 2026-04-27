@@ -767,9 +767,16 @@ const CONFIG = {
     
     //Máximo 13 Caracteres
     usuarios: [
-        {user:'Diego',pass:'150521'},{user:'Fabiano',pass:'1234'},{user:'Antonio',pass:'1234'},
-        {user:'Luciano',pass:'1234'},{user:'Vilmar',pass:'1234'},{user:'Adilson F.',pass:'1234'},
-        {user:'Matias',pass:'1234'},{user:'Benedito',pass:'1234'},{user:'Ivanildo',pass:'1234'},
-        {user:'Domingos',pass:'1234'},{user:'Valter',pass:'1234'}
+        {user:'Diego', pass:'150521', acessos: ['*']}, // O * dá acesso a todos os sistemas
+        {user:'Fabiano', pass:'1234', acessos: ['pesagem_mp', 'pesagem_tl']}, // Só tem acesso às pesagens
+        {user:'Antonio', pass:'1234', acessos: ['pesagem_mp', 'pesagem_tl']},
+        {user:'Luciano', pass:'1234', acessos: ['*']},
+        {user:'Vilmar', pass:'1234', acessos: ['*']},
+        {user:'Adilson F.', pass:'1234', acessos: ['*']},
+        {user:'Matias', pass:'1234', acessos: ['*']},
+        {user:'Benedito', pass:'1234', acessos: ['pesagem_mp', 'pesagem_tl']},
+        {user:'Ivanildo', pass:'1234', acessos: ['pesagem_mp', 'pesagem_tl']},
+        {user:'Domingos', pass:'1234', acessos: ['pesagem_mp', 'pesagem_tl']},
+        {user:'Valter', pass:'1234', acessos: ['*']}
     ]
 };
