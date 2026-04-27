@@ -52,6 +52,7 @@ sistemas-latem/
 │       ├── balanca.js                # Driver Web Serial e algoritmo de estabilização
 │       ├── config.js                 # Banco de dados local (Ligas, Operadores, etc.)
 │       ├── documents.js              # Motor de geração de relatórios em PDF
+|       ├── excel_api.js              # Integração com a planilha do Forno HO
 │       ├── id_mp.js                  # Lógica de Identificação de Matéria Prima
 │       ├── id_tl.js                  # Lógica de Identificação de Tarugos e Lingotes
 │       ├── pesagem_mp.js             # Lógica de Pesagem de Matéria Prima

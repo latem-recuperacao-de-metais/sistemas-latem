@@ -1,3 +1,4 @@
+// Configuração do Microsoft Entra ID (Azure)
 const msalConfig = {
     auth: {
         clientId: "4579a8e7-c8c1-48bc-987d-e53e2eb5e6f4",
@@ -9,52 +10,67 @@ const msalConfig = {
 const msalInstance = new msal.PublicClientApplication(msalConfig);
 const excelScopes = { scopes: ["User.Read", "Files.ReadWrite.All", "Sites.ReadWrite.All"] };
 
+// Mapeamento de Colunas (D=3, E=4, F=5, G=6, H=7, M=12, W=22)
 const COL = { LIGA: 3, LOTE: 4, POLEGADA: 5, BARRAS: 6, COMPRIMENTO: 7, FORNADA: 12, STATUS: 22 };
 
 window.dadosExcel = []; 
 let urlOficialExcel = ""; 
 
+// FUNÇÃO 1: Rota segura por ID (Inquebrável)
 async function getExcelUrlSegura(token) {
     if (urlOficialExcel) return urlOficialExcel;
     
-    const respostaSite = await fetch(`https://graph.microsoft.com/v1.0/sites/latemmetais.sharepoint.com:/sites/TarefasSuporte?$select=id`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-    });
-    const dadosSite = await respostaSite.json();
-    
-    const nomeArquivo = encodeURIComponent("Forno 30t.xlsx");
-    urlOficialExcel = `https://graph.microsoft.com/v1.0/sites/${dadosSite.id}/drive/root:/${nomeArquivo}:/workbook/worksheets('HO')/tables('TabelaHO')`;
-    return urlOficialExcel;
+    try {
+        console.log("1. Acessando a pasta de documentos...");
+        let res = await fetch(`https://graph.microsoft.com/v1.0/sites/latemmetais.sharepoint.com:/sites/TarefasSuporte:/drive`, { 
+            headers: { 'Authorization': `Bearer ${token}` } 
+        });
+        let drive = await res.json();
+        if (drive.error) throw new Error(drive.error.message);
+
+        console.log("2. Localizando o arquivo Forno 30t.xlsx...");
+        res = await fetch(`https://graph.microsoft.com/v1.0/drives/${drive.id}/root:/Forno%2030t.xlsx`, { 
+            headers: { 'Authorization': `Bearer ${token}` } 
+        });
+        let file = await res.json();
+        if (file.error) throw new Error(file.error.message);
+
+        // Rota oficial usando apenas IDs (Evita Erro 400 e 403 de Path)
+        urlOficialExcel = `https://graph.microsoft.com/v1.0/drives/${drive.id}/items/${file.id}/workbook/worksheets('HO')/tables('TabelaHO')`;
+        return urlOficialExcel;
+    } catch(e) {
+        console.error("Falha ao mapear arquivo na nuvem:", e);
+        throw e;
+    }
 }
 
+// FUNÇÃO 2: Login silencioso
 async function loginEConectarExcel() {
     try {
         await msalInstance.handleRedirectPromise();
-
         const accounts = msalInstance.getAllAccounts();
         if (accounts.length === 0) {
             await msalInstance.loginRedirect(excelScopes);
             return; 
         }
-        
         await puxarLotesAbertos();
     } catch (error) {
-        console.error("Erro na autenticação MSAL:", error);
-        if(typeof showToast === 'function') showToast("Erro ao conectar com o Microsoft 365.", "error");
+        console.error("Erro MSAL:", error);
     }
 }
 
+// FUNÇÃO 3: Gestor do Crachá (Token)
 async function getToken() {
     const account = msalInstance.getAllAccounts()[0];
     try {
         const response = await msalInstance.acquireTokenSilent({ ...excelScopes, account: account });
         return response.accessToken;
     } catch (err) {
-        console.warn("Token expirado, redirecionando...");
         await msalInstance.acquireTokenRedirect(excelScopes);
     }
 }
 
+// FUNÇÃO 4: Puxar Lotes
 async function puxarLotesAbertos() {
     try {
         const token = await getToken();
@@ -62,12 +78,12 @@ async function puxarLotesAbertos() {
 
         const url = await getExcelUrlSegura(token);
         
+        console.log("3. Lendo a TabelaHO...");
         const response = await fetch(`${url}/rows`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         
-        if(!response.ok) throw new Error("Erro na leitura da Tabela");
-
+        if(!response.ok) throw new Error("Erro na leitura");
         const data = await response.json();
         
         window.dadosExcel = [];
@@ -85,7 +101,7 @@ async function puxarLotesAbertos() {
                         lote: vals[COL.LOTE] || '',
                         polegada: vals[COL.POLEGADA] || '',
                         barrasTarget: parseInt(vals[COL.BARRAS]) || 0,
-                        forno: vals[COL.FORNADA] || '',
+                        forno: vals[COL.FORNADA] || '', 
                         comprimento: vals[COL.COMPRIMENTO] || ''
                     };
                     window.dadosExcel.push(loteObj);
@@ -95,12 +111,14 @@ async function puxarLotesAbertos() {
 
             setupAutocomplete('loteFornada', lotesParaCaixa);
             if(typeof showToast === 'function') showToast("Planilha de Produção sincronizada!", "success");
+            console.log("Lotes carregados:", lotesParaCaixa.length);
         }
     } catch (error) {
-        console.error("Erro ao puxar dados do Excel:", error);
+        console.error("Erro ao puxar dados:", error);
     }
 }
 
+// FUNÇÃO 5: Dar Baixa (Embalado)
 async function atualizarStatusExcel(loteNumero, novoStatus) {
     try {
         const loteData = window.dadosExcel.find(l => l.lote.toString() === loteNumero.toString());
@@ -111,21 +129,36 @@ async function atualizarStatusExcel(loteNumero, novoStatus) {
         
         const url = await getExcelUrlSegura(token);
 
+        console.log(`4. Preparando para alterar o lote ${loteNumero}...`);
+        
+        // 1. Pega a linha exata
         const getRow = await fetch(`${url}/rows/itemAt(index=${loteData.rowIndex})`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         const rowJson = await getRow.json();
         let valoresLinha = rowJson.values[0];
 
+        // 2. Altera apenas a coluna W
         valoresLinha[COL.STATUS] = novoStatus;
 
-        await fetch(`${url}/rows/itemAt(index=${loteData.rowIndex})`, {
+        // 3. Envia o PATCH
+        const resUpdate = await fetch(`${url}/rows/itemAt(index=${loteData.rowIndex})`, {
             method: 'PATCH',
-            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+            headers: { 
+                'Authorization': `Bearer ${token}`, 
+                'Content-Type': 'application/json' 
+            },
             body: JSON.stringify({ values: [valoresLinha] })
         });
 
-        console.log(`Lote ${loteNumero} atualizado para ${novoStatus}!`);
+        if (!resUpdate.ok) {
+            const erroDetalhado = await resUpdate.json();
+            console.error("ERRO 403 RECUSADO PELA MICROSOFT:", erroDetalhado);
+            if(typeof showToast === 'function') showToast("Erro 403: O seu usuário Microsoft não tem permissão para editar esta planilha.", "error");
+        } else {
+            console.log(`Sucesso! Lote ${loteNumero} atualizado para ${novoStatus} no SharePoint!`);
+            if(typeof showToast === 'function') showToast("Lote dado como Embalado no Excel!", "success");
+        }
     } catch (error) {
         console.error("Erro ao dar baixa no Excel:", error);
     }
