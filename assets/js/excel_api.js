@@ -1,4 +1,3 @@
-// Configuração do Microsoft Entra ID (Azure)
 const msalConfig = {
     auth: {
         clientId: "4579a8e7-c8c1-48bc-987d-e53e2eb5e6f4",
@@ -10,13 +9,11 @@ const msalConfig = {
 const msalInstance = new msal.PublicClientApplication(msalConfig);
 const excelScopes = { scopes: ["User.Read", "Files.ReadWrite.All", "Sites.ReadWrite.All"] };
 
-// Mapeamento de Colunas (D=3, E=4, F=5, G=6, H=7, M=12, W=22)
 const COL = { LIGA: 3, LOTE: 4, POLEGADA: 5, BARRAS: 6, COMPRIMENTO: 7, FORNADA: 12, STATUS: 22 };
 
 window.dadosExcel = []; 
 let urlOficialExcel = ""; 
 
-// FUNÇÃO 1: Rota segura por ID (Inquebrável)
 async function getExcelUrlSegura(token) {
     if (urlOficialExcel) return urlOficialExcel;
     
@@ -35,7 +32,6 @@ async function getExcelUrlSegura(token) {
         let file = await res.json();
         if (file.error) throw new Error(file.error.message);
 
-        // Rota oficial usando apenas IDs (Evita Erro 400 e 403 de Path)
         urlOficialExcel = `https://graph.microsoft.com/v1.0/drives/${drive.id}/items/${file.id}/workbook/worksheets('HO')/tables('TabelaHO')`;
         return urlOficialExcel;
     } catch(e) {
@@ -44,7 +40,6 @@ async function getExcelUrlSegura(token) {
     }
 }
 
-// FUNÇÃO 2: Login silencioso
 async function loginEConectarExcel() {
     try {
         await msalInstance.handleRedirectPromise();
@@ -59,7 +54,6 @@ async function loginEConectarExcel() {
     }
 }
 
-// FUNÇÃO 3: Gestor do Crachá (Token)
 async function getToken() {
     const account = msalInstance.getAllAccounts()[0];
     try {
@@ -70,7 +64,6 @@ async function getToken() {
     }
 }
 
-// FUNÇÃO 4: Puxar Lotes
 async function puxarLotesAbertos() {
     try {
         const token = await getToken();
@@ -118,7 +111,6 @@ async function puxarLotesAbertos() {
     }
 }
 
-// FUNÇÃO 5: Dar Baixa (Embalado)
 async function atualizarStatusExcel(loteNumero, novoStatus) {
     try {
         const loteData = window.dadosExcel.find(l => l.lote.toString() === loteNumero.toString());
@@ -131,17 +123,18 @@ async function atualizarStatusExcel(loteNumero, novoStatus) {
 
         console.log(`4. Preparando para alterar o lote ${loteNumero}...`);
         
-        // 1. Pega a linha exata
         const getRow = await fetch(`${url}/rows/itemAt(index=${loteData.rowIndex})`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         const rowJson = await getRow.json();
-        let valoresLinha = rowJson.values[0];
+        
+        let tamanhoDaLinha = rowJson.values[0].length;
+        if (tamanhoDaLinha <= COL.STATUS) tamanhoDaLinha = COL.STATUS + 1;
+        
+        let valoresLinha = new Array(tamanhoDaLinha).fill(null);
 
-        // 2. Altera apenas a coluna W
         valoresLinha[COL.STATUS] = novoStatus;
 
-        // 3. Envia o PATCH
         const resUpdate = await fetch(`${url}/rows/itemAt(index=${loteData.rowIndex})`, {
             method: 'PATCH',
             headers: { 
@@ -154,7 +147,7 @@ async function atualizarStatusExcel(loteNumero, novoStatus) {
         if (!resUpdate.ok) {
             const erroDetalhado = await resUpdate.json();
             console.error("ERRO 403 RECUSADO PELA MICROSOFT:", erroDetalhado);
-            if(typeof showToast === 'function') showToast("Erro 403: O seu usuário Microsoft não tem permissão para editar esta planilha.", "error");
+            if(typeof showToast === 'function') showToast("Erro: O Excel impediu a gravação. A coluna de Status está bloqueada/protegida?", "error");
         } else {
             console.log(`Sucesso! Lote ${loteNumero} atualizado para ${novoStatus} no SharePoint!`);
             if(typeof showToast === 'function') showToast("Lote dado como Embalado no Excel!", "success");
