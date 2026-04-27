@@ -35,6 +35,20 @@ document.getElementById('liga').addEventListener('input', (e) => {
     toggleCamposTarugo(); saveFormState();
 });
 
+document.getElementById('loteFornada').addEventListener('input', (e) => {
+    const loteEscolhido = e.target.value;
+    if(window.dadosExcel && window.dadosExcel.length > 0) {
+        const info = window.dadosExcel.find(l => l.lote.toString() === loteEscolhido);
+        if(info) {
+            document.getElementById('liga').value = info.liga || '';
+            document.getElementById('polegada').value = info.polegada || '';
+            document.getElementById('comprimento').value = info.comprimento || '';
+            document.getElementById('liga').dispatchEvent(new Event('input')); 
+            if(typeof showToast === 'function') showToast(`Lote localizado. Meta: ${info.barrasTarget} barras.`, "info");
+        }
+    }
+});
+
 function toggleCamposTarugo() { 
     const isTarugo = document.getElementById('tipo').value === 'Tarugo'; 
     document.getElementById('camposTarugo').classList.toggle('hidden', !isTarugo); 
@@ -89,10 +103,8 @@ function limparTudo() {
     const fo = document.getElementById('forno').value;
 
     if (a) {
-        // CORREÇÃO: Agora ele verifica se a quantidade e o peso já estão zerados
         if ((!q || q==='0' || q==='') && (!b || b==='0')) return showToast("Os campos parciais já estão vazios.", "warning");
-        limparParcial(); 
-        showToast("Campos parciais limpos.", "success");
+        limparParcial(); showToast("Campos parciais limpos.", "success");
     } else {
         if (!lf && !lg && !fo && (!q || q==='0' || q==='') && (!b || b==='0')) return showToast("O formulário já está vazio.", "warning");
         unlockFields();
@@ -125,6 +137,17 @@ function registrarProducao() {
         responsavel: currentUser
     }; 
     const db = getDb(); db.unshift(i); saveDb(db); 
+    
+    if(window.dadosExcel) {
+        const info = window.dadosExcel.find(l => l.lote.toString() === lote);
+        if(info && info.barrasTarget > 0) {
+            const pecasPesadas = db.filter(item => item.lote === lote).reduce((acc, item) => acc + parseInt(item.qtd), 0);
+            if(pecasPesadas >= info.barrasTarget) {
+                showToast(`ATENÇÃO: Total planeado atingido (${pecasPesadas}/${info.barrasTarget} barras)`, "warning");
+            }
+        }
+    }
+
     lockFields(); showToast("Pesagem registada com sucesso!", "success"); 
     gerarEtiqueta(i); limparParcial(); saveFormState();
 }
@@ -212,12 +235,20 @@ function gerarRelatorio(){
         <table><thead><tr><th style="text-align:center;width:15%">Nº</th><th style="text-align:center;width:35%">Quantidade</th><th style="text-align:right;width:50%">Peso (kg)</th></tr></thead><tbody>${rw}</tbody></table>
     `; 
     baixarArquivoRelatorio("Relatório de Pesagem de Tarugos e Lingotes", conteudoHTML, filename, currentUser);
+    
+    if(typeof atualizarStatusExcel === 'function') {
+        atualizarStatusExcel(db[0].lote, "Embalado");
+    }
+
     localStorage.removeItem('latem_pesagem_tl_bd'); localStorage.removeItem('latem_pesagem_tl_estado');
     unlockFields(); renderHistory(); limparTudo();
 }
 
 window.onload = () => { 
     setupAutocomplete('liga', CONFIG.ligas); setupAutocomplete('polegada', CONFIG.polegadas);
+    
+    setTimeout(() => { if(typeof loginEConectarExcel === 'function') loginEConectarExcel(); }, 1000);
+
     loadFormState();
     const d = getDb(); 
     if(d.length > 0) {
