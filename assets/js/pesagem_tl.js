@@ -42,6 +42,7 @@ document.getElementById('loteFornada').addEventListener('input', (e) => {
         if(info) {
             document.getElementById('liga').value = info.liga || '';
             document.getElementById('polegada').value = info.polegada || '';
+            document.getElementById('forno').value = info.forno || '';
             document.getElementById('comprimento').value = info.comprimento || '';
             document.getElementById('liga').dispatchEvent(new Event('input')); 
             if(typeof showToast === 'function') showToast(`Lote localizado. Meta: ${info.barrasTarget} barras.`, "info");
