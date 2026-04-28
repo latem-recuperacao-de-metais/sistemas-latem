@@ -18,14 +18,12 @@ async function getExcelUrlSegura(token) {
     if (urlOficialExcel) return urlOficialExcel;
     
     try {
-        console.log("1. Acessando a pasta de documentos...");
         let res = await fetch(`https://graph.microsoft.com/v1.0/sites/latemmetais.sharepoint.com:/sites/TarefasSuporte:/drive`, { 
             headers: { 'Authorization': `Bearer ${token}` } 
         });
         let drive = await res.json();
         if (drive.error) throw new Error(drive.error.message);
 
-        console.log("2. Localizando o arquivo Forno 30t.xlsx...");
         res = await fetch(`https://graph.microsoft.com/v1.0/drives/${drive.id}/root:/Forno%2030t.xlsx`, { 
             headers: { 'Authorization': `Bearer ${token}` } 
         });
@@ -35,7 +33,6 @@ async function getExcelUrlSegura(token) {
         urlOficialExcel = `https://graph.microsoft.com/v1.0/drives/${drive.id}/items/${file.id}/workbook/worksheets('HO')/tables('TabelaHO')`;
         return urlOficialExcel;
     } catch(e) {
-        console.error("Falha ao mapear arquivo na nuvem:", e);
         throw e;
     }
 }
@@ -50,7 +47,6 @@ async function loginEConectarExcel() {
         }
         await puxarLotesAbertos();
     } catch (error) {
-        console.error("Erro MSAL:", error);
     }
 }
 
@@ -71,7 +67,6 @@ async function puxarLotesAbertos() {
 
         const url = await getExcelUrlSegura(token);
         
-        console.log("3. Lendo a TabelaHO...");
         const response = await fetch(`${url}/rows`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -104,10 +99,8 @@ async function puxarLotesAbertos() {
 
             setupAutocomplete('loteFornada', lotesParaCaixa);
             if(typeof showToast === 'function') showToast("Planilha de Produção sincronizada!", "success");
-            console.log("Lotes carregados:", lotesParaCaixa.length);
         }
     } catch (error) {
-        console.error("Erro ao puxar dados:", error);
     }
 }
 
@@ -121,7 +114,6 @@ async function atualizarStatusExcel(loteNumero, novoStatus) {
         
         const url = await getExcelUrlSegura(token);
 
-        console.log(`4. Preparando para alterar o lote ${loteNumero}...`);
         
         const getRow = await fetch(`${url}/rows/itemAt(index=${loteData.rowIndex})`, {
             headers: { 'Authorization': `Bearer ${token}` }
@@ -146,13 +138,10 @@ async function atualizarStatusExcel(loteNumero, novoStatus) {
 
         if (!resUpdate.ok) {
             const erroDetalhado = await resUpdate.json();
-            console.error("ERRO 403 RECUSADO PELA MICROSOFT:", erroDetalhado);
-            if(typeof showToast === 'function') showToast("Erro: O Excel impediu a gravação. A coluna de Status está bloqueada/protegida?", "error");
+            if(typeof showToast === 'function') showToast("Erro: O Excel impediu a gravação", "error");
         } else {
-            console.log(`Sucesso! Lote ${loteNumero} atualizado para ${novoStatus} no SharePoint!`);
-            if(typeof showToast === 'function') showToast("Lote dado como Embalado no Excel!", "success");
+            if(typeof showToast === 'function') showToast("Lote atualizado para pesado no Excel!", "success");
         }
     } catch (error) {
-        console.error("Erro ao dar baixa no Excel:", error);
-    }
+        if(typeof showToast === 'function') showToast("Erro ao atualizar o Excel: " + error.message, "error");}
 }

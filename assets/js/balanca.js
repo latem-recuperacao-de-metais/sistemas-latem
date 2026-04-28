@@ -71,7 +71,6 @@ async function autoConnectScale() {
             atualizarStatusEstabilizacao(true, "Modo Manual");
         }
     } catch (e) {
-        console.error("Erro na autoconexão:", e);
         updateStatus(false);
         atualizarStatusEstabilizacao(true, "Modo Manual");
     }
